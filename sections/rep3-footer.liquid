@@ -1,0 +1,71 @@
+{%- assign s = section.settings -%}
+
+<footer class="rep3 rep3-pie">
+  <div class="rep3-wrap rep3-pie__in">
+    <p class="rep3-pie__frase">{{ s.slogan | escape }} <em>{{ s.slogan_red | escape }}</em></p>
+    {%- if s.instagram_url != blank -%}
+      <a class="rep3-pie__ig" href="{{ s.instagram_url }}" target="_blank" rel="noopener">{{ s.instagram_label | escape }}</a>
+    {%- endif -%}
+
+    {%- if s.menu.links.size > 0 -%}
+      <nav class="rep3-pie__nav" aria-label="Pie de página">
+        {%- for link in s.menu.links -%}
+          <a href="{{ link.url }}">{{ link.title | escape }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
+    {%- if s.show_policies and shop.policies.size > 0 -%}
+      <ul class="rep3-pie__legal" role="list">
+        {%- for policy in shop.policies -%}
+          {%- comment -%} Shopify da los títulos en el idioma de la tienda (inglés); aquí van en español. {%- endcomment -%}
+          {%- liquid
+            assign titulo = policy.title
+            if policy.url contains 'privacy-policy'
+              assign titulo = 'Aviso de privacidad'
+            elsif policy.url contains 'refund-policy'
+              assign titulo = 'Política de devoluciones'
+            elsif policy.url contains 'terms-of-service'
+              assign titulo = 'Términos del servicio'
+            elsif policy.url contains 'shipping-policy'
+              assign titulo = 'Política de envíos'
+            elsif policy.url contains 'contact-information'
+              assign titulo = 'Información de contacto'
+            elsif policy.url contains 'legal-notice'
+              assign titulo = 'Aviso legal'
+            endif
+          -%}
+          <li><a href="{{ policy.url }}">{{ titulo | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    <p class="rep3-pie__copy">© {{ 'now' | date: '%Y' }} {{ s.copyright | escape }}</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "REP3 · Pie de página",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "slogan", "label": "Frase", "default": "¡¡Hay niveles" },
+    { "type": "text", "id": "slogan_red", "label": "Frase (en rojo)", "default": "pareja!!" },
+    { "type": "text", "id": "instagram_label", "label": "Instagram · texto", "default": "@ranchoelprincipio_oficial" },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "Instagram · enlace",
+      "default": "https://www.instagram.com/ranchoelprincipio_oficial/"
+    },
+    { "type": "link_list", "id": "menu", "label": "Menú", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_policies", "label": "Mostrar políticas de la tienda", "default": true },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Texto de derechos",
+      "default": "Rancho El Principio · Selección Colimense de Chuy Ordaz"
+    }
+  ],
+  "presets": [{ "name": "REP3 · Pie de página" }]
+}
+{% endschema %}

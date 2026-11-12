@@ -1,0 +1,83 @@
+{%- assign s = section.settings -%}
+
+<section class="rep rep-light" id="tienda">
+  <div class="rep-wrap rep-wrap--tight-bottom">
+    <div class="rep-sec-head">
+      <div class="rep-sec-head__titles">
+        {%- if s.label != blank -%}
+          <p class="rep-label">{{ s.label | escape }}</p>
+        {%- endif -%}
+        <h2 class="rep-h2">{{ s.heading | escape }}</h2>
+      </div>
+      {%- if s.link_label != blank -%}
+        <a class="rep-link" href="{{ s.link | default: routes.all_products_collection_url }}">{{ s.link_label | escape }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="rep-grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign c = block.settings.collection
+          assign href = routes.all_products_collection_url
+          if c != blank
+            assign href = c.url
+          endif
+          assign placeholder = 'collection-' | append: forloop.index
+        -%}
+        <a class="rep-card" href="{{ href }}" {{ block.shopify_attributes }}>
+          <span class="rep-card__media">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 800
+                | image_tag: loading: 'lazy', widths: '350, 500, 800', sizes: '(min-width: 900px) 25vw, 50vw'
+              }}
+            {%- elsif c.featured_image != blank -%}
+              {{
+                c.featured_image
+                | image_url: width: 800
+                | image_tag: loading: 'lazy', widths: '350, 500, 800', sizes: '(min-width: 900px) 25vw, 50vw'
+              }}
+            {%- else -%}
+              {{ placeholder | placeholder_svg_tag }}
+            {%- endif -%}
+          </span>
+          <span class="rep-card__name rep-card__name--cat">{{ block.settings.title | escape }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP · Categorías",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Etiqueta (opcional)" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Viste con nivel" },
+    { "type": "text", "id": "link_label", "label": "Texto del enlace", "default": "Ver toda la tienda" },
+    { "type": "url", "id": "link", "label": "Enlace", "default": "/collections/all" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Categoría",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Nombre", "default": "Gorras" },
+        { "type": "collection", "id": "collection", "label": "Colección" },
+        { "type": "image_picker", "id": "image", "label": "Imagen (opcional; si no, usa la de la colección)" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "REP · Categorías",
+      "blocks": [
+        { "type": "card", "settings": { "title": "Gorras" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

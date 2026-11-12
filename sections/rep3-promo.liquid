@@ -1,0 +1,40 @@
+{%- assign s = section.settings -%}
+
+<div class="rep3 rep3-promo-sec">
+  <div class="rep3-wrap">
+    <a class="rep3-promo" href="{{ routes.cart_url }}">
+      <span class="rep3-promo__num">{{ s.number | escape }}</span>
+      <span class="rep3-promo__txt">
+        <span class="rep3-promo__t">{{ s.title | escape }}</span>
+        <span class="rep3-promo__p">{{ s.text | escape }}</span>
+      </span>
+      {%- if s.collection != blank -%}
+        <span class="rep3-promo__gorras" aria-hidden="true">
+          {%- for p in s.collection.products limit: 3 -%}
+            {%- if p.featured_media != blank -%}
+              {{ p.featured_media | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 240', sizes: '96px', alt: '' }}
+            {%- endif -%}
+          {%- endfor -%}
+        </span>
+      {%- endif -%}
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "REP3 · Llévate 3",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texto fijo: actualízalo si cambian las tarifas en Configuración › Envío. La tarjeta lleva al carrito."
+    },
+    { "type": "text", "id": "number", "label": "Número", "default": "3" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Gorras = envío gratis" },
+    { "type": "text", "id": "text", "label": "Texto", "default": "A todo México, en compras de $2,997" },
+    { "type": "collection", "id": "collection", "label": "Gorras que se muestran", "info": "Las tres primeras de la colección." }
+  ],
+  "presets": [{ "name": "REP3 · Llévate 3" }]
+}
+{% endschema %}

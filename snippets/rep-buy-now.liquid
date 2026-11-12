@@ -1,0 +1,18 @@
+{%- doc -%}
+  Botón "Comprar ahora" de la marca. Agrega la variante elegida al carrito y manda directo al pago,
+  donde siguen apareciendo Shop Pay, tarjetas y demás métodos. Sustituye al botón de pago acelerado
+  de Shopify, que no se puede recolorear. La lógica vive en assets/rep.js.
+
+  Debe renderizarse dentro del formulario del producto. Si la variante se agota, el bloque
+  accelerated-checkout que lo contiene se oculta.
+
+  @example
+  {% render 'rep-buy-now' %}
+{%- enddoc -%}
+
+<div class="rep-buy-now-wrap">
+  <button type="button" class="rep-buy-now" data-rep-buy-now>
+    Comprar ahora
+  </button>
+  <p class="rep-buy-now__error" role="alert" hidden></p>
+</div>

@@ -1,0 +1,17 @@
+<div {{ block.shopify_attributes }}>
+  {% render 'rep3-envio-progreso', nota: true, compacta: true %}
+</div>
+
+{% schema %}
+{
+  "name": "REP3 · Envío gratis",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Muestra cuántas gorras faltan para el envío gratis según el carrito. Tarifas fijas: actualízalas en el código si cambian en Configuración › Envío."
+    }
+  ],
+  "presets": [{ "name": "REP3 · Envío gratis" }]
+}
+{% endschema %}

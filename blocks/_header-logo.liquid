@@ -23,6 +23,24 @@
   assign alt_text_fallback = 'accessibility.home_logo_alt' | t: store_name: shop.name
 %}
 
+{%- comment -%}
+  Rancho El Principio v3: menú partido alrededor del logo, como Monkey Hats.
+  La primera mitad del menú principal va a la izquierda y el resto a la derecha.
+  Solo en computadora (990 px o más); en teléfono navega el botón flotante «Navegación».
+{%- endcomment -%}
+{%- liquid
+  assign rep3_links = linklists['main-menu'].links
+  assign rep3_mitad = rep3_links.size | plus: 1 | divided_by: 2
+-%}
+<div class="rep3-hdr">
+<button type="button" class="rep3-hdr__menu" data-rep3-nav-abrir aria-label="Abrir menú" aria-haspopup="dialog">
+  <svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 2h20M1 8h20M1 14h20"/></svg>
+</button>
+<nav class="rep3-hdr__nav rep3-hdr__nav--izq" aria-label="Principal">
+  {%- for link in rep3_links limit: rep3_mitad -%}
+    <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+  {%- endfor -%}
+</nav>
 {% comment %}
   Output all logo variants, use CSS to hide/show the appropriate one
   based on the .header[transparent] selector
@@ -57,14 +75,26 @@
     {% endif %}
     data-testid="header-logo"
   >
-    {% render 'image',
-      image: settings.logo,
-      class: 'header-logo__image',
-      height: settings.logo_height,
-      alt_text_fallback: alt_text_fallback,
-      text_fallback: shop.name,
-      style: logo_style
-    %}
+    {%- if settings.logo != blank -%}
+      {% render 'image',
+        image: settings.logo,
+        class: 'header-logo__image',
+        height: settings.logo_height,
+        alt_text_fallback: alt_text_fallback,
+        text_fallback: shop.name,
+        style: logo_style
+      %}
+    {%- else -%}
+      {%- comment -%} Rancho El Principio: logo de la marca incluido en el tema mientras no se suba uno. {%- endcomment -%}
+      <img
+        src="{{ 'rep-logo.png' | asset_url }}"
+        alt="{{ alt_text_fallback | escape }}"
+        class="rep-logo-fallback"
+        width="1000"
+        height="386"
+        style="--rep-logo-h: {{ settings.logo_height }}px; --rep-logo-h-m: {{ settings.logo_height_mobile }}px;"
+      >
+    {%- endif -%}
   </span>
 
   {% if use_inverse_logo %}
@@ -83,6 +113,12 @@
     </span>
   {% endif %}
 </a>
+<nav class="rep3-hdr__nav rep3-hdr__nav--der" aria-label="Más">
+  {%- for link in rep3_links offset: rep3_mitad -%}
+    <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+  {%- endfor -%}
+</nav>
+</div>
 
 {% stylesheet %}
   .header-logo {

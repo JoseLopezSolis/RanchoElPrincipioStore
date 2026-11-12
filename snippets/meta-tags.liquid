@@ -19,7 +19,21 @@
 >
 
 {%- liquid
-  assign og_title = page_title | default: shop.name
+  # Títulos de las políticas en español (Shopify los da en el idioma de la tienda)
+  assign titulo = page_title
+  case page_title
+    when 'Privacy policy'
+      assign titulo = 'Aviso de privacidad'
+    when 'Refund policy'
+      assign titulo = 'Política de devoluciones'
+    when 'Terms of service'
+      assign titulo = 'Términos del servicio'
+    when 'Shipping policy'
+      assign titulo = 'Política de envíos'
+    when 'Contact information'
+      assign titulo = 'Información de contacto'
+  endcase
+  assign og_title = titulo | default: shop.name
   assign og_url = canonical_url | default: request.origin
   assign og_type = 'website'
   assign og_description = page_description | default: shop.description | default: shop.name
@@ -104,9 +118,9 @@
 >
 
 <title>
-  {{ page_title }}
-  {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-  {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+  {{ titulo }}
+  {%- if current_tags %} &ndash; etiqueta "{{ current_tags | join: ', ' }}"{% endif -%}
+  {%- if current_page != 1 %} &ndash; Página {{ current_page }}{% endif -%}
   {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
 </title>
 

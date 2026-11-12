@@ -1,0 +1,91 @@
+{%- liquid
+  assign s = section.settings
+  assign c = s.collection
+  assign has_products = false
+  if c != blank and c.products_count > 0
+    assign has_products = true
+  endif
+  assign demo_names = 'Gorra El Principio Original|Gorra El Principio Fino|Gorra El Principio Consentida|Gorra El Principio Selección Colimense' | split: '|'
+  assign demo_meta = 'Negra · Camuflaje|Negra|Hueso · Rosa|Hueso · Camuflaje' | split: '|'
+-%}
+
+<section class="rep rep-light">
+  <div class="rep-wrap rep-wrap--tight-top">
+    <div class="rep-sec-head rep-sec-head--rule">
+      <h2 class="rep-slogan-h">
+        {{- s.heading_1 | escape }}
+        {% if s.heading_2 != blank %}<span class="rep-red-l">{{ s.heading_2 | escape }}</span>{% endif -%}
+      </h2>
+      {%- if s.subheading != blank -%}
+        <p class="rep-sub">{{ s.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="rep-grid">
+      {%- if has_products -%}
+        {%- for product in c.products limit: s.limit -%}
+          <a class="rep-card" href="{{ product.url }}">
+            <span class="rep-card__media">
+              {%- if product.featured_media != blank -%}
+                {{
+                  product.featured_media
+                  | image_url: width: 800
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '350, 500, 800',
+                    sizes: '(min-width: 900px) 25vw, 50vw',
+                    alt: product.title
+                }}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag }}
+              {%- endif -%}
+              {%- if product.available == false -%}
+                <span class="rep-card__badge rep-card__badge--dark">Se fue al ruedo</span>
+              {%- elsif product.compare_at_price > product.price -%}
+                <span class="rep-card__badge">Oferta</span>
+              {%- endif -%}
+            </span>
+            <span class="rep-card__name">{{ product.title | escape }}</span>
+            <span class="rep-card__price">{{ product.price | money }}</span>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Sin colección elegida: tarjetas de ejemplo con los productos del diseño. {%- endcomment -%}
+        {%- for name in demo_names -%}
+          {%- assign placeholder = 'product-' | append: forloop.index -%}
+          <a class="rep-card" href="{{ routes.all_products_collection_url }}">
+            <span class="rep-card__media">
+              {{ placeholder | placeholder_svg_tag }}
+              {%- if forloop.first -%}<span class="rep-card__badge">Nuevo</span>{%- endif -%}
+            </span>
+            <span class="rep-card__name">{{ name }}</span>
+            <span class="rep-card__meta">{{ demo_meta[forloop.index0] }}</span>
+            <span class="rep-card__price">Próximamente</span>
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if s.button_label != blank -%}
+      <a class="rep-btn rep-btn--dark" href="{% if c != blank %}{{ c.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}">
+        {{- s.button_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP · Productos",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading_1", "label": "Frase", "default": "Poquito" },
+    { "type": "text", "id": "heading_2", "label": "Frase (en rojo)", "default": "pero fino" },
+    { "type": "text", "id": "subheading", "label": "Subtítulo", "default": "Lo más pedido de la tienda." },
+    { "type": "collection", "id": "collection", "label": "Colección" },
+    { "type": "range", "id": "limit", "label": "Número de productos", "min": 2, "max": 12, "step": 2, "default": 4 },
+    { "type": "text", "id": "button_label", "label": "Botón", "default": "Ver toda la tienda" }
+  ],
+  "presets": [{ "name": "REP · Productos" }]
+}
+{% endschema %}

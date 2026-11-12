@@ -1,0 +1,75 @@
+{%- liquid
+  assign s = block.settings
+  assign current = closest.product
+  assign c = s.collection
+  assign cur_name = current.title
+  if s.name_prefix != blank
+    assign short = current.title | remove_first: s.name_prefix | strip
+    if short != blank
+      assign cur_name = short
+    endif
+  endif
+-%}
+
+{%- if c != blank and c.products_count > 1 -%}
+  <div class="rep2-modelos" {{ block.shopify_attributes }}>
+    <p class="rep2-modelos__label">{{ s.label | escape }}: <span>{{ cur_name | escape }}</span></p>
+    <ul class="rep2-modelos__list" role="list">
+      {%- for p in c.products limit: 24 -%}
+        {%- liquid
+          assign n = p.title
+          if s.name_prefix != blank
+            assign short = p.title | remove_first: s.name_prefix | strip
+            if short != blank
+              assign n = short
+            endif
+          endif
+        -%}
+        <li>
+          <a
+            class="rep2-modelos__a{% if p.id == current.id %} is-current{% endif %}"
+            href="{{ p.url }}"
+            title="{{ n | escape }}"
+            data-no-transition
+            {% if p.id == current.id %}
+              aria-current="page"
+            {% endif %}
+          >
+            {%- if p.featured_media != blank -%}
+              {{ p.featured_media | image_url: width: 200 | image_tag: loading: 'lazy', widths: '100, 200', sizes: '84px', alt: n }}
+            {%- else -%}
+              <span class="visually-hidden">{{ n | escape }}</span>
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <script>
+      // En el teléfono las miniaturas van en una fila que se desliza: la gorra actual queda a la vista.
+      (function () {
+        var actual = document.currentScript.parentElement.querySelector('.rep2-modelos__a.is-current');
+        var lista = actual && actual.closest('.rep2-modelos__list');
+        if (lista && lista.scrollWidth > lista.clientWidth) {
+          lista.scrollLeft = Math.max(0, actual.parentElement.offsetLeft - lista.offsetLeft - 24);
+        }
+      })();
+    </script>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "REP2 · Modelos",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Muestra las gorras de la colección como miniaturas; la actual queda marcada."
+    },
+    { "type": "text", "id": "label", "label": "Etiqueta", "default": "Modelo" },
+    { "type": "collection", "id": "collection", "label": "Colección" },
+    { "type": "text", "id": "name_prefix", "label": "Quitar del nombre", "default": "Gorra El Principio" }
+  ],
+  "presets": [{ "name": "REP2 · Modelos" }]
+}
+{% endschema %}

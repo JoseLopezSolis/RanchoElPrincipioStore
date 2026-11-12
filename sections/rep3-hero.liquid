@@ -1,0 +1,205 @@
+{%- liquid
+  assign s = section.settings
+  assign mostrar_intro = false
+  if s.intro_enabled and request.design_mode == false
+    assign mostrar_intro = true
+  endif
+-%}
+
+<div class="rep3-hero-pista{% if s.pin_mobile %} rep3-hero-pista--fija{% endif %}">
+<section
+  class="rep3 rep3-hero"
+  id="rep3-hero-{{ section.id }}"
+  style="--rep3-amb: url('{{ 'rep-plaza-ancha.jpg' | asset_url }}'); --rep3-fondo-m: url('{{ 'rep-chuy-brazo-movil-fondo.jpg' | asset_url }}'); --rep3-fondo-d: url('{{ 'rep-chuy-brazo-fondo.jpg' | asset_url }}');"
+>
+  <div class="rep3-hero__amb" aria-hidden="true"></div>
+  <div class="rep3-hero__arte">
+    <div class="rep3-hero__fondo" aria-hidden="true"></div>
+    <picture>
+      <source
+        media="(min-width: 760px)"
+        srcset="{{ 'rep-chuy-brazo.png' | asset_url }}"
+        width="1800"
+        height="1642"
+      >
+      <img
+        class="rep3-hero__chuy"
+        src="{{ 'rep-chuy-brazo-movil.png' | asset_url }}"
+        width="1120"
+        height="1300"
+        alt="{{ s.image_alt | escape }}"
+        loading="eager"
+        fetchpriority="high"
+      >
+    </picture>
+  </div>
+  <div class="rep3-hero__panel">
+    <div class="rep3-hero__in">
+      <h2 class="rep3-hero__h">
+        <span>{{ s.title_1 | escape }}</span>
+        <span>{{ s.title_2 | escape }}</span>
+      </h2>
+      {%- if s.subtitle != blank -%}
+        <p class="rep3-hero__p">{{ s.subtitle | escape }}</p>
+      {%- endif -%}
+      {%- if s.button_label != blank -%}
+        <a class="rep3-btn rep3-btn--borde rep3-hero__btn" href="{{ s.button_link | default: routes.all_products_collection_url }}">
+          {{- s.button_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+{%- if s.pin_mobile -%}
+  {%- comment -%} Teléfono: solo Chuy se queda fijo; la plaza y el texto siguen subiendo. {%- endcomment -%}
+  <div class="rep3-hero__capa" aria-hidden="true">
+    <div class="rep3-hero__capa-arte">
+      <picture>
+        <source media="(min-width: 760px)" srcset="{{ 'rep-chuy-brazo.png' | asset_url }}" width="1800" height="1642">
+        <img class="rep3-hero__chuy" src="{{ 'rep-chuy-brazo-movil.png' | asset_url }}" width="1120" height="1300" alt="" loading="eager">
+      </picture>
+    </div>
+  </div>
+{%- endif -%}
+</div>
+<script>
+  // Chuy entra con un zoom suave en cuanto se ve su foto (después de la pantalla de carga o de la monta).
+  (function () {
+    var hero = document.getElementById('rep3-hero-{{ section.id }}');
+    var img = hero && hero.querySelector('.rep3-hero__arte .rep3-hero__chuy');
+    if (!img) return;
+    var raiz = document.documentElement;
+    function viva() { requestAnimationFrame(function () { hero.classList.add('is-viva'); }); }
+    function arranca() {
+      if (raiz.classList.contains('rep3-intro-on')) return setTimeout(arranca, 200);
+      if (img.complete) return viva();
+      img.addEventListener('load', viva, { once: true });
+      img.addEventListener('error', viva, { once: true });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () { setTimeout(arranca, 120); });
+    } else {
+      setTimeout(arranca, 120);
+    }
+  })();
+</script>
+
+{%- if mostrar_intro -%}
+  <div
+    class="rep3-intro"
+    id="rep3-intro-{{ section.id }}"
+    role="dialog"
+    aria-label="Intro: monta de toro de Rancho El Principio"
+    data-v="{{ 'rep-monta-intro.mp4' | asset_url }}"
+    data-v-poster="{{ 'rep-monta-intro-poster.jpg' | asset_url }}"
+    data-h="{{ 'rep-monta-intro-ancha.mp4' | asset_url }}"
+    data-h-poster="{{ 'rep-monta-intro-ancha-poster.jpg' | asset_url }}"
+    data-once="{{ s.intro_once }}"
+    hidden
+  >
+    <video muted playsinline preload="auto"></video>
+    <div class="rep3-intro__pie">
+      <span class="rep3-intro__marca">Rancho<br>El Principio</span>
+      <button type="button" class="rep3-ctrl" data-saltar>Saltar</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var intro = document.getElementById('rep3-intro-{{ section.id }}');
+      if (!intro) return;
+      var raiz = document.documentElement;
+      var video = intro.querySelector('video');
+      var once = intro.dataset.once === 'true';
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var visto = false;
+      try { visto = once && sessionStorage.getItem('rep3-intro-visto') === '1'; } catch (e) {}
+      if (reduce || visto) return;
+
+      var ancho = window.matchMedia && window.matchMedia('(min-aspect-ratio: 1/1)').matches;
+      video.poster = ancho ? intro.dataset.hPoster : intro.dataset.vPoster;
+      video.src = ancho ? intro.dataset.h : intro.dataset.v;
+
+      var timers = [];
+      var FADE_OUT = 700;
+      var acabado = false;
+      function terminar() {
+        if (acabado) return;
+        acabado = true;
+        timers.forEach(clearTimeout);
+        intro.classList.add('is-saliendo');
+        raiz.classList.remove('rep3-intro-on');
+        setTimeout(function () {
+          intro.hidden = true;
+          try { video.pause(); } catch (e) {}
+        }, FADE_OUT);
+        document.removeEventListener('keydown', alTeclear);
+      }
+      function alTeclear(e) { if (e.key === 'Escape') terminar(); }
+
+      try { sessionStorage.setItem('rep3-intro-visto', '1'); } catch (e) {}
+      intro.hidden = false;
+      raiz.classList.add('rep3-intro-on');
+      var p = video.play();
+      if (p && p.catch) p.catch(function () {});
+      requestAnimationFrame(function () { requestAnimationFrame(function () { intro.classList.add('is-visible'); }); });
+      // El fundido empieza cuando faltan 0.7 s, así la cámara lenta del final se ve completa
+      video.addEventListener('timeupdate', function () {
+        if (video.duration && video.duration - video.currentTime <= FADE_OUT / 1000) terminar();
+      });
+      video.addEventListener('ended', terminar);
+      // Topes: si el video se atora o no carga, la intro no estorba
+      timers.push(setTimeout(terminar, 6500));
+      timers.push(setTimeout(function () { if (video.readyState < 2) terminar(); }, 2500));
+      video.addEventListener('error', terminar);
+      intro.querySelector('[data-saltar]').addEventListener('click', terminar);
+      document.addEventListener('keydown', alTeclear);
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "REP3 · Portada de Chuy",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title_1", "label": "Título · línea 1", "default": "Desde" },
+    { "type": "text", "id": "title_2", "label": "Título · línea 2", "default": "El Principio" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Las gorras oficiales de Chuy Ordaz" },
+    { "type": "text", "id": "button_label", "label": "Botón", "default": "Compra ya" },
+    {
+      "type": "text",
+      "id": "button_link",
+      "label": "Enlace del botón",
+      "info": "Por ejemplo /collections/gorras (todas las gorras) o #gorras (baja a la sección de esta página).",
+      "default": "/collections/gorras"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Descripción de la foto",
+      "default": "Chuy Ordaz en la plaza, con su sombrero negro en la mano"
+    },
+    {
+      "type": "checkbox",
+      "id": "pin_mobile",
+      "label": "En teléfono, Chuy se queda fijo al bajar",
+      "info": "La foto se detiene un momento y «Las gorras» sube encima de ella.",
+      "default": true
+    },
+    { "type": "header", "content": "Intro de la monta" },
+    { "type": "checkbox", "id": "intro_enabled", "label": "Abrir con la monta", "default": true },
+    {
+      "type": "checkbox",
+      "id": "intro_once",
+      "label": "Solo la primera vez por visita",
+      "info": "Si lo apagas, la monta sale cada vez que se abre el inicio.",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "En el editor del tema la monta no se reproduce, para que puedas editar sin que estorbe."
+    }
+  ],
+  "presets": [{ "name": "REP3 · Portada de Chuy" }]
+}
+{% endschema %}

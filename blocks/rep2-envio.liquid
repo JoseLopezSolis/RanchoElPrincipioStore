@@ -1,0 +1,24 @@
+<p class="rep2-envio" {{ block.shopify_attributes }}>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h11v10H2z"/><path d="M13 9h5l3 3v4h-8z"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+  <span>{{ block.settings.text }}</span>
+</p>
+
+{% schema %}
+{
+  "name": "REP2 · Envío",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texto fijo: actualízalo si cambian las tarifas en Configuración › Envío."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "Envío $170 a todo México. <strong>Gratis comprando 3 gorras.</strong>"
+    }
+  ],
+  "presets": [{ "name": "REP2 · Envío" }]
+}
+{% endschema %}

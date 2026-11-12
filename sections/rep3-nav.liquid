@@ -1,0 +1,130 @@
+{%- liquid
+  assign s = section.settings
+-%}
+
+<div class="rep3 rep3-nav" id="rep3-nav-{{ section.id }}">
+  <button
+    type="button"
+    class="rep3-nav__btn"
+    aria-haspopup="dialog"
+    aria-controls="rep3-nav-panel-{{ section.id }}"
+    data-abrir
+  >
+    <svg width="26" height="18" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M1 2h24M1 9h24M1 16h24"/>
+    </svg>
+    <span>{{ s.label | escape }}</span>
+  </button>
+
+  <dialog class="rep3-nav__panel" id="rep3-nav-panel-{{ section.id }}" aria-label="{{ s.label | escape }}">
+    <nav class="rep3-nav__lista" aria-label="{{ s.label | escape }}">
+      <ul role="list">
+        {%- for link in s.menu.links -%}
+          <li>
+            {%- if link.links.size > 0 -%}
+              <button
+                type="button"
+                class="rep3-nav__a rep3-nav__a--sub"
+                aria-expanded="false"
+                aria-controls="rep3-nav-sub-{{ section.id }}-{{ forloop.index }}"
+                data-sub
+              >
+                <span>{{ link.title | escape }}</span>
+                <svg class="rep3-nav__chev" width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 2l8 8-8 8"/></svg>
+              </button>
+              <ul class="rep3-nav__sub" id="rep3-nav-sub-{{ section.id }}-{{ forloop.index }}" role="list" hidden>
+                <li><a class="rep3-nav__a rep3-nav__a--chico" href="{{ link.url }}">Todo en {{ link.title | escape }}</a></li>
+                {%- for child in link.links -%}
+                  <li><a class="rep3-nav__a rep3-nav__a--chico" href="{{ child.url }}">{{ child.title | escape }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <a class="rep3-nav__a" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+        {%- if s.show_rancho -%}
+          <li><a class="rep3-nav__a" href="{{ routes.root_url }}#rancho">Rancho El Principio</a></li>
+        {%- endif -%}
+        {%- if s.show_account and shop.customer_accounts_enabled -%}
+          <li>
+            {%- if customer -%}
+              <a class="rep3-nav__a" href="{{ routes.account_url }}">Mi cuenta</a>
+            {%- else -%}
+              <a class="rep3-nav__a" href="{{ routes.account_login_url }}">Ingresar</a>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+        {%- if s.show_search -%}
+          <li><a class="rep3-nav__a" href="{{ routes.search_url }}">Buscar</a></li>
+        {%- endif -%}
+      </ul>
+    </nav>
+    <button type="button" class="rep3-nav__cerrar" aria-label="Cerrar navegación" data-cerrar>
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 2l18 18M20 2L2 20"/></svg>
+    </button>
+  </dialog>
+</div>
+
+<script>
+  (function () {
+    var raiz = document.getElementById('rep3-nav-{{ section.id }}');
+    if (!raiz) return;
+    var panel = raiz.querySelector('dialog');
+    var abrir = raiz.querySelector('[data-abrir]');
+    if (!panel || typeof panel.showModal !== 'function') return;
+
+    function cerrar() {
+      if (!panel.open) return;
+      panel.classList.add('is-cerrando');
+      setTimeout(function () { panel.classList.remove('is-cerrando'); panel.close(); }, 180);
+    }
+
+    var origen = abrir;
+    function mostrar(boton) {
+      origen = boton || abrir;
+      panel.showModal();
+      origen.setAttribute('aria-expanded', 'true');
+    }
+    abrir.addEventListener('click', function () { mostrar(abrir); });
+    // El menú de hamburguesa del encabezado también abre la Navegación
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-rep3-nav-abrir]');
+      if (b) { e.preventDefault(); mostrar(b); }
+    });
+    panel.addEventListener('close', function () { origen.setAttribute('aria-expanded', 'false'); origen.focus(); });
+    raiz.querySelector('[data-cerrar]').addEventListener('click', cerrar);
+    // Tocar fuera del panel lo cierra
+    panel.addEventListener('click', function (e) { if (e.target === panel) cerrar(); });
+    panel.addEventListener('cancel', function (e) { e.preventDefault(); cerrar(); });
+    // Las ligas a #rancho en la misma página cierran el panel
+    panel.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { panel.close(); }); });
+    panel.querySelectorAll('[data-sub]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var sub = document.getElementById(b.getAttribute('aria-controls'));
+        var abierto = b.getAttribute('aria-expanded') === 'true';
+        b.setAttribute('aria-expanded', abierto ? 'false' : 'true');
+        sub.hidden = abierto;
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "REP3 · Navegación",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Menú del teléfono: se abre con la hamburguesa del encabezado. Muestra las ligas principales."
+    },
+    { "type": "text", "id": "label", "label": "Texto del botón", "default": "Navegación" },
+    { "type": "link_list", "id": "menu", "label": "Menú", "default": "main-menu" },
+    { "type": "checkbox", "id": "show_rancho", "label": "Agregar «Rancho El Principio»", "default": true },
+    { "type": "checkbox", "id": "show_account", "label": "Agregar «Ingresar»", "default": true },
+    { "type": "checkbox", "id": "show_search", "label": "Agregar «Buscar»", "default": true }
+  ],
+  "presets": [{ "name": "REP3 · Navegación" }]
+}
+{% endschema %}

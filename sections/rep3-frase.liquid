@@ -1,0 +1,21 @@
+{%- assign s = section.settings -%}
+
+<section class="rep3 rep3-frase">
+  <p class="rep3-frase__t">
+    <span>{{ s.line_1 | escape }}</span>
+    <span>{{ s.line_2 | escape }} <em>{{ s.red | escape }}</em></span>
+  </p>
+</section>
+
+{% schema %}
+{
+  "name": "REP3 · Frase",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "line_1", "label": "Línea 1", "default": "Poquito" },
+    { "type": "text", "id": "line_2", "label": "Línea 2", "default": "pero" },
+    { "type": "text", "id": "red", "label": "Palabra en rojo", "default": "fino" }
+  ],
+  "presets": [{ "name": "REP3 · Frase" }]
+}
+{% endschema %}

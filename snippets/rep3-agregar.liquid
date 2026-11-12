@@ -1,0 +1,47 @@
+{% doc %}
+  Botón «Agregar» de una gorra en las tarjetas (inicio, otras gorras): la agrega directo al carrito
+  con el mismo componente de Horizon que la ficha del producto (contador, animación y cajón del carrito).
+  Solo para gorras de una sola variante; si se agota, el botón queda desactivado.
+
+  @param {object} product - Gorra a agregar.
+  @param {string} section_id - ID de la sección (para refrescar el carrito).
+{% enddoc %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'Rep3Agregar-' | append: section_id | append: '-' | append: product.id
+-%}
+
+{%- if product.variants_count == 1 -%}
+  <product-form-component
+    data-section-id="{{ section_id }}"
+    data-product-id="{{ product.id }}"
+    on:submit="/handleSubmit"
+    class="rep3-agregar"
+  >
+    <div class="visually-hidden" aria-live="assertive" role="status" aria-atomic="true" ref="liveRegion"></div>
+    {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" ref="variantId" value="{{ variant.id }}"{% unless variant.available %} disabled{% endunless %}>
+      <input type="hidden" name="quantity" value="1">
+      {%- if variant.available -%}
+        {% render 'add-to-cart-button',
+          add_to_cart_text: 'Agregar',
+          class: 'rep3-agregar__btn add-to-cart-button',
+          can_add_to_cart: true,
+          show_icon: true,
+          product: product
+        %}
+      {%- else -%}
+        {% render 'add-to-cart-button',
+          add_to_cart_text: 'Agotada',
+          class: 'rep3-agregar__btn add-to-cart-button',
+          can_add_to_cart: false,
+          show_icon: false,
+          product: product
+        %}
+      {%- endif -%}
+    {%- endform -%}
+  </product-form-component>
+{%- else -%}
+  <a class="rep3-agregar__btn button" href="{{ product.url }}">Ver opciones</a>
+{%- endif -%}

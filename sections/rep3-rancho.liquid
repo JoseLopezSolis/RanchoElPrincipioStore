@@ -1,0 +1,85 @@
+{%- assign s = section.settings -%}
+
+<section class="rep3 rep3-rancho" id="{{ s.anchor | default: 'rancho' | handleize }}">
+  <div class="rep3-wrap rep3-rancho__in">
+    <figure class="rep3-rancho__foto">
+      {%- if s.image != blank -%}
+        {{ s.image | image_url: width: 1600 | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1600', sizes: '(min-width: 760px) 50vw, 100vw', alt: s.image_alt }}
+      {%- else -%}
+        <img src="{{ 'rep-monta-3.jpg' | asset_url }}" width="1600" height="1066" alt="{{ s.image_alt | escape }}" loading="lazy">
+      {%- endif -%}
+      {%- if s.credit != blank -%}
+        <figcaption>{{ s.credit | escape }}</figcaption>
+      {%- endif -%}
+    </figure>
+
+    <div class="rep3-rancho__txt">
+      <h2 class="rep3-h2 rep3-rancho__h">{{ s.heading | escape }}</h2>
+      <div class="rep3-rancho__rte">{{ s.text }}</div>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="rep3-rancho__datos">
+          {%- for block in section.blocks -%}
+            <div class="rep3-dato" {{ block.shopify_attributes }}>
+              <span class="rep3-etq rep3-rojo">{{ block.settings.label | escape }}</span>
+              <span class="rep3-dato__v">{{ block.settings.value | escape }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.button_label != blank and s.button_link != blank -%}
+        <a class="rep3-btn rep3-btn--borde rep3-rancho__btn" href="{{ s.button_link }}" target="_blank" rel="noopener">
+          {{- s.button_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP3 · Rancho",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Foto", "info": "Si no eliges una, se usa la del toro brincando en el ruedo." },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Descripción de la foto",
+      "default": "El toro brinca sobre el jinete caído mientras el lazador y el payaso entran al ruedo"
+    },
+    { "type": "text", "id": "credit", "label": "Crédito de la foto", "default": "Foto: Aferrados al Jaripeo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Rancho El Principio" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>La ganadería de toros de reparo de Chuy Ordaz, conocida en el jaripeo como la <strong>Selección Colimense</strong>.</p><p>Hemos atendido jaripeos en todos los estados de la República y tenemos presencia en la Unión Americana.</p>"
+    },
+    { "type": "text", "id": "button_label", "label": "Botón", "default": "Síguenos en Instagram" },
+    { "type": "text", "id": "button_link", "label": "Enlace del botón", "default": "https://www.instagram.com/ranchoelprincipio_oficial/" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "info": "Para enlaces como #rancho.", "default": "rancho" }
+  ],
+  "blocks": [
+    {
+      "type": "dato",
+      "name": "Dato",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Etiqueta", "default": "Toro emblemático" },
+        { "type": "text", "id": "value", "label": "Dato", "default": "Señor del Sombrero" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "REP3 · Rancho",
+      "blocks": [
+        { "type": "dato", "settings": { "label": "Toro emblemático", "value": "Señor del Sombrero" } },
+        { "type": "dato", "settings": { "label": "De la tierra", "value": "100% Colima" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -8,278 +8,254 @@
  * ------------------------------------------------------------
  */{
   "sections": {
-    "hero_jVaWmY": {
-      "type": "hero",
+    "rep3_hero": {
+      "type": "rep3-hero",
+      "settings": {
+        "pin_mobile": false,
+        "button_link": "/collections/gorras",
+        "intro_enabled": false
+      }
+    },
+    "rep3_gorras": {
+      "type": "rep3-gorras",
+      "settings": {
+        "collection": "gorras"
+      },
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "gorra_1": {
+          "type": "producto",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "text_color": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "product": "gorra-el-principio-original"
+          }
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "gorra_2": {
+          "type": "producto",
           "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "rgba(0,0,0,0)",
-            "custom_button_text": "{{ settings.color_palette.background }}",
-            "custom_button_border": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "product": "gorra-el-principio-fino"
+          }
+        },
+        "gorra_3": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-consentida"
+          }
+        },
+        "gorra_4": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-seleccion-colimense"
+          }
+        },
+        "gorra_5": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-blanca-con-negro"
+          }
+        },
+        "gorra_6": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-arena"
+          }
+        },
+        "gorra_7": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-olivo-con-negro"
+          }
+        },
+        "gorra_8": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-arena-con-negro"
+          }
+        },
+        "gorra_9": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-olivo-trenzada"
+          }
+        },
+        "gorra_10": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-negra-trenzada"
+          }
+        },
+        "gorra_11": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-arena-con-gamuza"
+          }
         }
       },
       "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
-      ],
-      "name": "t:names.hero",
-      "settings": {
-        "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "background_color": "rgba(0,0,0,0)",
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
-      }
+        "gorra_1",
+        "gorra_2",
+        "gorra_3",
+        "gorra_4",
+        "gorra_5",
+        "gorra_6",
+        "gorra_7",
+        "gorra_8",
+        "gorra_9",
+        "gorra_10",
+        "gorra_11"
+      ]
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "rep3_promo": {
+      "type": "rep3-promo",
+      "settings": {}
+    },
+    "rep3_rancho": {
+      "type": "rep3-rancho",
+      "disabled": true,
+      "settings": {},
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "dato_1": {
+          "type": "dato",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+            "label": "Toro emblemático",
+            "value": "Señor del Sombrero"
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "dato_2": {
+          "type": "dato",
           "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "label": "De la tierra",
+            "value": "100% Colima"
+          }
         }
       },
-      "name": "t:names.product_list",
+      "block_order": [
+        "dato_1",
+        "dato_2"
+      ]
+    },
+    "rep3_frase": {
+      "type": "rep3-frase",
+      "settings": {}
+    },
+    "rep3_redes": {
+      "type": "rep3-redes",
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      }
+        "heading": "Síguenos en nuestras redes"
+      },
+      "blocks": {
+        "post_1": {
+          "type": "instagram",
+          "settings": {
+            "url": "https://www.instagram.com/p/DXIBhYlCVCu/",
+            "formato": "1.333",
+            "imagen": "shopify://shop_images/redes-DXIBhYlCVCu.jpg"
+          }
+        },
+        "post_2": {
+          "type": "instagram",
+          "settings": {
+            "url": "https://www.instagram.com/p/DXCkTu4iH1w/",
+            "formato": "1.333",
+            "imagen": "shopify://shop_images/redes-DXCkTu4iH1w.jpg"
+          }
+        },
+        "post_3": {
+          "type": "instagram",
+          "settings": {
+            "url": "https://www.instagram.com/p/DTTr3HEiRqE/",
+            "formato": "1.333",
+            "imagen": "shopify://shop_images/redes-DTTr3HEiRqE.jpg"
+          }
+        },
+        "video_4": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/DMgskAfRr4c/"
+          }
+        },
+        "video_5": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/DJVTQzmsfnb/"
+          }
+        },
+        "post_6": {
+          "type": "instagram",
+          "settings": {
+            "url": "https://www.instagram.com/p/DGooJE9pbLv/",
+            "formato": "1.25",
+            "imagen": "shopify://shop_images/redes-DGooJE9pbLv.jpg"
+          }
+        },
+        "video_7": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/DGmPrhxxW2-/"
+          }
+        },
+        "video_9": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/DELrPQORge9/"
+          }
+        },
+        "video_10": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/DEIytbUx8dP/"
+          }
+        },
+        "video_11": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/DEHBxiERxlz/"
+          }
+        },
+        "video_12": {
+          "type": "video",
+          "settings": {
+            "link": "https://www.instagram.com/p/C-bmLOjRu5L/"
+          }
+        },
+        "post_13": {
+          "type": "instagram",
+          "settings": {
+            "url": "https://www.instagram.com/p/C9Oi5CoRKAT/",
+            "formato": "1.25",
+            "imagen": "shopify://shop_images/redes-C9Oi5CoRKAT-v2.jpg"
+          }
+        },
+        "post_14": {
+          "type": "instagram",
+          "settings": {
+            "url": "https://www.instagram.com/p/C5934dvrgH2/",
+            "formato": "1",
+            "imagen": "shopify://shop_images/redes-C5934dvrgH2.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "post_1",
+        "post_13",
+        "post_6",
+        "post_2",
+        "post_3",
+        "post_14",
+        "video_4",
+        "video_5",
+        "video_7",
+        "video_9",
+        "video_10",
+        "video_11",
+        "video_12"
+      ]
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "rep3_hero",
+    "rep3_gorras",
+    "rep3_promo",
+    "rep3_rancho",
+    "rep3_redes",
+    "rep3_frase"
   ]
 }
