@@ -188,5 +188,10 @@
     {% endif %}
 
     {% render 'background-music' %}
+
+    {%- comment -%} Rancho El Principio: cambia de página sin recargar para que la música no se corte. {%- endcomment -%}
+    {%- unless request.design_mode -%}
+      <script src="{{ 'rep-nav.js' | asset_url }}" type="module"></script>
+    {%- endunless -%}
   </body>
 </html>

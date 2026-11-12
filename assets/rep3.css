@@ -2230,3 +2230,21 @@ product-card product-price .price {
     transition: none;
   }
 }
+
+/* Barra de carga al cambiar de página sin recargar (assets/rep-nav.js). */
+#rep-nav-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1000;
+  height: 3px;
+  background: var(--rep3-rojo, #c62828);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+}
+#rep-nav-progress.is-on {
+  opacity: 1;
+  transform: scaleX(0.85);
+  transition: transform 1.2s cubic-bezier(0.1, 0.6, 0.2, 1);
+}
