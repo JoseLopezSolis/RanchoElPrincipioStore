@@ -1,7 +1,7 @@
 {% doc %}
   Cuadro de envío gratis (producto y carrito): tres tramos, uno por gorra.
-  Tarifas fijas (Configuración › Envío): estándar $149, gratis desde $2,997 MXN; cada gorra cuesta $999.
-  Solo se muestra en pesos: la tarifa internacional no tiene envío gratis.
+  Tarifas fijas (Configuración › Envío): estándar $170 MXN; gratis con 3 gorras o más (descuento automático) o desde $2,997 MXN; cada gorra cuesta $999.
+  Solo se muestra en pesos: el envío a Estados Unidos ($750) no tiene envío gratis.
 
   @param {boolean} [nota] - Muestra la línea de tarifas debajo de la barra.
   @param {boolean} [compacta] - Versión chica, para la ficha del producto (arriba, junto al precio).
@@ -36,7 +36,7 @@
       {%- endfor -%}
     </div>
     {%- if nota -%}
-      <p class="rep3-envio__nota">Envío estándar $149 · gratis en compras de $2,997 o más (3 gorras).</p>
+      <p class="rep3-envio__nota">Envío estándar $170 · gratis comprando 3 gorras o más.</p>
     {%- endif -%}
   </div>
 {%- endif -%}
