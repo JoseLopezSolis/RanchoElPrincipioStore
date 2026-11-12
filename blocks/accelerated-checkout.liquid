@@ -19,13 +19,12 @@
 %}
 
 {%- comment -%}
-  Rancho El Principio: botón propio "Comprar ahora" en lugar del pago acelerado de Shopify
-  (Shop Pay solo existe en morado). Shop Pay sigue disponible en el pago. El contenedor conserva
-  ref="acceleratedCheckoutButtonContainer" para que product-form.js lo oculte si la variante se agota.
+  Rancho El Principio: botones de pago rápido de Shopify. Shopify elige qué billetera mostrar según
+  el dispositivo (Apple Pay en Safari/iOS, Google Pay en Chrome/Android, además de Shop Pay y PayPal).
 {%- endcomment -%}
 {% capture accelerated_checkout_button %}
   {% if product != blank and form_obj != blank %}
-    {% render 'rep-buy-now' %}
+    {{ form_obj | payment_button }}
   {% endif %}
 {% endcapture %}
 
