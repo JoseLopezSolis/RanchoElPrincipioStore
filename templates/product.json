@@ -283,7 +283,7 @@
                     "text_envios": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Estándar a todo México: $149. Expreso: $195. Comprando 3 gorras o más ($2,997), el envío es gratis. Envíos internacionales: $360.</p>",
+                        "text": "<p>Envío estándar a todo México: $170. Comprando 3 gorras o más, el envío es gratis. Envíos a Estados Unidos: $750.</p><p>Todas las ventas son finales: no hacemos cambios ni devoluciones, salvo por producto defectuoso o pedido equivocado.</p>",
                         "width": "100%"
                       }
                     }
