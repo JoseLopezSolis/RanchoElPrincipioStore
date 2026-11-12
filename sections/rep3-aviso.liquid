@@ -40,7 +40,9 @@
         var items = raiz.querySelectorAll('.rep3-aviso__in');
         var i = 0;
         var ms = parseInt(raiz.dataset.ms, 10) || 4000;
-        setInterval(function () {
+        var reloj = setInterval(function () {
+          // Al cambiar de página sin recargar este aviso se reemplaza: detener su temporizador
+          if (!raiz.isConnected) return clearInterval(reloj);
           items[i].classList.remove('is-activo');
           items[i].setAttribute('aria-hidden', 'true');
           i = (i + 1) % items.length;

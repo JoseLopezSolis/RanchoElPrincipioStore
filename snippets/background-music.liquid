@@ -84,14 +84,16 @@
         button.setAttribute('aria-label', muted ? 'Activar música' : 'Silenciar música');
       }
 
-      var interactionEvents = ['pointerdown', 'keydown', 'touchstart'];
+      // Phones (iOS and Android) only allow audio to start from the END of a tap (touchend/click),
+      // not from touchstart/pointerdown. Keep listening until playback really starts.
+      var interactionEvents = ['click', 'touchend', 'pointerup', 'keydown'];
       function removeUnlock() {
         interactionEvents.forEach(function (evt) { document.removeEventListener(evt, unlock, true); });
       }
       function unlock(event) {
         if (event && button.contains(event.target)) return; // the button handles its own click
-        removeUnlock();
-        if (!muted) audio.play().catch(function () {});
+        if (muted) return removeUnlock();
+        audio.play().then(removeUnlock).catch(function () {});
       }
 
       function start() {

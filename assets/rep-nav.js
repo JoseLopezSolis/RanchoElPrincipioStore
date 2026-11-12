@@ -240,16 +240,26 @@ window.addEventListener('popstate', () => {
   navigate(location.href, { push: false, savedTop: typeof savedTop === 'number' ? savedTop : undefined });
 });
 
-// Preload on hover / touch so the change feels instant.
+// Desktop only: preload a page when the mouse rests on its link, so the change feels instant.
+// Never on touch (scrolling a phone touches many links, and a burst of requests gets the visitor
+// rate-limited by Shopify), and only one preload at a time.
+let hoverTimer = 0;
+let prefetching = false;
 function prefetch(event) {
+  if (event.pointerType !== 'mouse') return;
   const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+  clearTimeout(hoverTimer);
   if (!link || link.target === '_blank') return;
   const url = new URL(link.href, location.href);
   if (!canHandle(url) || url.pathname === location.pathname) return;
-  fetchPage(url.href).catch(() => {});
+  hoverTimer = setTimeout(() => {
+    if (prefetching || cache.has(url.href)) return;
+    prefetching = true;
+    fetchPage(url.href).catch(() => {}).finally(() => { prefetching = false; });
+  }, 65);
 }
 document.addEventListener('pointerover', prefetch, { passive: true });
-document.addEventListener('touchstart', prefetch, { passive: true });
+document.addEventListener('pointerout', () => clearTimeout(hoverTimer), { passive: true });
 
 // Keep the first entry recognisable for back/forward.
 if (!history.state) history.replaceState({ repNav: true }, '');

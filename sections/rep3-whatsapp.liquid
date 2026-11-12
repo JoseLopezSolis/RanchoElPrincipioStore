@@ -23,7 +23,9 @@
     (function () {
       var a = document.currentScript.previousElementSibling;
       if (!a || !a.classList.contains('rep3-wa')) return;
-      // Se mueve al body para quedar fijo respecto a la pantalla en todas las páginas
+      // Se mueve al body para quedar fijo respecto a la pantalla en todas las páginas.
+      // Al cambiar de página sin recargar (assets/rep-nav.js) se quita el botón de la página anterior.
+      document.querySelectorAll('body > .rep3-wa').forEach(function (viejo) { if (viejo !== a) viejo.remove(); });
       document.body.appendChild(a);
       // En la ficha se esconde mientras quedaría encima de «Agregar al carrito»
       if (!a.classList.contains('rep3-wa--alto')) return;
@@ -38,12 +40,22 @@
         });
         a.classList.toggle('is-oculto', tapa);
       }
-      function pide() { if (!pendiente) { pendiente = true; requestAnimationFrame(revisa); } }
+      function pide() {
+        if (!a.isConnected) return suelta();
+        if (!pendiente) { pendiente = true; requestAnimationFrame(revisa); }
+      }
+      function suelta() {
+        window.removeEventListener('scroll', pide);
+        document.removeEventListener('scroll', pide, true);
+        window.removeEventListener('resize', pide);
+        observador.disconnect();
+      }
       window.addEventListener('scroll', pide, { passive: true });
       document.addEventListener('scroll', pide, { passive: true, capture: true });
       window.addEventListener('resize', pide);
       // La barra fija de «Agregar» cambia la altura del botón
-      new MutationObserver(function () { setTimeout(pide, 220); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-stuck'] });
+      var observador = new MutationObserver(function () { setTimeout(pide, 220); });
+      observador.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-stuck'] });
       revisa();
       window.addEventListener('load', revisa);
     })();
