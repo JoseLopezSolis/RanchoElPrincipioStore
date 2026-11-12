@@ -1,0 +1,83 @@
+{%- liquid
+  assign s = section.settings
+  assign numero = s.phone | remove: ' ' | remove: '-' | remove: '+' | remove: '(' | remove: ')'
+  if product
+    assign mensaje = s.message_product | replace: '[gorra]', product.title
+  else
+    assign mensaje = s.message
+  endif
+-%}
+
+{%- if numero != blank -%}
+  <a
+    class="rep3-wa{% if template.name == 'product' %} rep3-wa--alto{% endif %}"
+    href="https://wa.me/{{ numero }}?text={{ mensaje | url_encode }}"
+    target="_blank"
+    rel="noopener"
+    aria-label="Escríbenos por WhatsApp"
+  >
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16.04 3C9.4 3 4 8.33 4 14.9c0 2.33.69 4.5 1.88 6.34L4 29l7.98-1.84A12.2 12.2 0 0 0 16.04 26.8C22.68 26.8 28 21.47 28 14.9 28 8.33 22.68 3 16.04 3Zm0 21.66c-1.9 0-3.66-.52-5.17-1.42l-.37-.22-4.74 1.1 1.13-4.5-.25-.39a9.6 9.6 0 0 1-1.5-5.33c0-5.4 4.42-9.79 9.9-9.79 5.46 0 9.88 4.39 9.88 9.79 0 5.38-4.42 9.76-9.88 9.76Zm5.43-7.3c-.3-.15-1.76-.86-2.03-.96-.27-.1-.47-.15-.67.15-.2.29-.77.95-.94 1.15-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.46-.88-.78-1.48-1.75-1.65-2.04-.17-.3-.02-.45.13-.6.13-.13.3-.34.45-.51.15-.17.2-.3.3-.49.1-.2.05-.37-.02-.51-.08-.15-.67-1.6-.92-2.19-.24-.57-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.29-1.04 1-1.04 2.45 0 1.44 1.06 2.83 1.21 3.03.15.2 2.08 3.15 5.04 4.42.7.3 1.25.48 1.68.62.7.22 1.35.19 1.86.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35Z"/></svg>
+    {%- if s.label != blank -%}<span>{{ s.label | escape }}</span>{%- endif -%}
+  </a>
+  <script>
+    (function () {
+      var a = document.currentScript.previousElementSibling;
+      if (!a || !a.classList.contains('rep3-wa')) return;
+      // Se mueve al body para quedar fijo respecto a la pantalla en todas las páginas
+      document.body.appendChild(a);
+      // En la ficha se esconde mientras quedaría encima de «Agregar al carrito»
+      if (!a.classList.contains('rep3-wa--alto')) return;
+      var pendiente = false;
+      function revisa() {
+        pendiente = false;
+        var r = a.getBoundingClientRect();
+        var tapa = false;
+        document.querySelectorAll('.product-information .add-to-cart-button').forEach(function (b) {
+          var q = b.getBoundingClientRect();
+          if (q.width && r.left < q.right && r.right > q.left && r.top < q.bottom && r.bottom > q.top) tapa = true;
+        });
+        a.classList.toggle('is-oculto', tapa);
+      }
+      function pide() { if (!pendiente) { pendiente = true; requestAnimationFrame(revisa); } }
+      window.addEventListener('scroll', pide, { passive: true });
+      document.addEventListener('scroll', pide, { passive: true, capture: true });
+      window.addEventListener('resize', pide);
+      // La barra fija de «Agregar» cambia la altura del botón
+      new MutationObserver(function () { setTimeout(pide, 220); }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-stuck'] });
+      revisa();
+      window.addEventListener('load', revisa);
+    })();
+  </script>
+{%- elsif request.design_mode -%}
+  <p class="rep3-wa-aviso">Escribe el número de WhatsApp en «REP3 · WhatsApp» para mostrar el botón.</p>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "REP3 · WhatsApp",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Número de WhatsApp",
+      "info": "Con lada de país, sin espacios. Ej. 523121234567 (52 = México). Si lo dejas vacío, el botón no se muestra."
+    },
+    { "type": "text", "id": "label", "label": "Texto junto al ícono (opcional)", "info": "En computadora. Ej. ¿Dudas?" },
+    {
+      "type": "text",
+      "id": "message",
+      "label": "Mensaje inicial",
+      "default": "Hola, tengo una duda sobre las gorras de Rancho El Principio."
+    },
+    {
+      "type": "text",
+      "id": "message_product",
+      "label": "Mensaje inicial en una gorra",
+      "info": "[gorra] se cambia por el nombre de la gorra.",
+      "default": "Hola, tengo una duda sobre la [gorra]."
+    }
+  ],
+  "presets": [{ "name": "REP3 · WhatsApp" }]
+}
+{% endschema %}

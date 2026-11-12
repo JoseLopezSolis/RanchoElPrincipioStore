@@ -1,0 +1,56 @@
+{%- assign s = section.settings -%}
+
+<section class="rep rep2-envios" id="{{ s.anchor | default: 'envios' | handleize }}">
+  <div class="rep2-wrap rep2-sec">
+    <div class="rep2-head">
+      <h2 class="rep2-h2">{{ s.heading | escape }}</h2>
+    </div>
+    <dl class="rep2-ship">
+      {%- for block in section.blocks -%}
+        <div class="rep2-ship__c" {{ block.shopify_attributes }}>
+          <dt class="rep2-ship__l">{{ block.settings.label | escape }}</dt>
+          <dd class="rep2-ship__v{% if block.settings.highlight %} rep2-red-l{% endif %}">
+            {{- block.settings.value | escape -}}
+          </dd>
+        </div>
+      {%- endfor -%}
+    </dl>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP2 · Envíos",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texto fijo: actualízalo si cambian las tarifas en Configuración › Envío."
+    },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Envíos" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "envios" }
+  ],
+  "blocks": [
+    {
+      "type": "fila",
+      "name": "Tarifa",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Concepto", "default": "Estándar, a todo México" },
+        { "type": "text", "id": "value", "label": "Precio", "default": "$170" },
+        { "type": "checkbox", "id": "highlight", "label": "En rojo", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "REP2 · Envíos",
+      "blocks": [
+        { "type": "fila", "settings": { "label": "Estándar, a todo México", "value": "$170" } },
+        { "type": "fila", "settings": { "label": "Comprando 3 gorras o más", "value": "Gratis", "highlight": true } },
+        { "type": "fila", "settings": { "label": "Expreso", "value": "$195" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

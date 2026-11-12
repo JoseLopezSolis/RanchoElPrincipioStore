@@ -1,0 +1,125 @@
+{%- comment -%}
+  Background music with a mute/unmute button.
+  - Starts on page load when the browser allows it; otherwise on the visitor's first click/tap/keypress
+    (browsers block unmuted autoplay until the user interacts with the page).
+  - Remembers if the visitor muted it (localStorage) and resumes the song position between pages (sessionStorage).
+  - Disabled inside the theme editor.
+{%- endcomment -%}
+{%- unless request.design_mode -%}
+  <audio id="BackgroundMusic" src="{{ 'la-de-blanco.mp3' | asset_url }}" loop preload="auto"></audio>
+
+  <button
+    type="button"
+    id="BackgroundMusicToggle"
+    class="bg-music-toggle"
+    aria-label="Silenciar música"
+    aria-pressed="false"
+  >
+    <svg class="bg-music-toggle__icon bg-music-toggle__icon--on" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>
+      <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <svg class="bg-music-toggle__icon bg-music-toggle__icon--off" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/>
+      <path d="M16 9l6 6M22 9l-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <style>
+    .bg-music-toggle {
+      position: fixed;
+      left: 16px;
+      z-index: 50;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      border: 2px solid rgba(246, 242, 236, 0.85);
+      border-radius: 50%;
+      background: var(--rep3-negro, #0b0a09);
+      color: #f6f2ec;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .bg-music-toggle:hover { transform: scale(1.06); }
+    .bg-music-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+    .bg-music-toggle__icon { width: 22px; height: 22px; }
+    .bg-music-toggle__icon--off { display: none; }
+    .bg-music-toggle[aria-pressed='true'] .bg-music-toggle__icon--on { display: none; }
+    .bg-music-toggle[aria-pressed='true'] .bg-music-toggle__icon--off { display: block; }
+  </style>
+
+  <script>
+    (function () {
+      var audio = document.getElementById('BackgroundMusic');
+      var button = document.getElementById('BackgroundMusicToggle');
+      if (!audio || !button) return;
+
+      var MUTED_KEY = 'bgMusicMuted';
+      var TIME_KEY = 'bgMusicTime';
+      audio.volume = 0.4;
+
+      function read(storage, key) {
+        try { return storage.getItem(key); } catch (e) { return null; }
+      }
+      function write(storage, key, value) {
+        try { storage.setItem(key, value); } catch (e) {}
+      }
+
+      var muted = read(localStorage, MUTED_KEY) === '1';
+
+      var savedTime = parseFloat(read(sessionStorage, TIME_KEY));
+      if (!isNaN(savedTime)) {
+        audio.addEventListener('loadedmetadata', function () {
+          if (savedTime < audio.duration) audio.currentTime = savedTime;
+        }, { once: true });
+      }
+
+      function render() {
+        button.setAttribute('aria-pressed', muted ? 'true' : 'false');
+        button.setAttribute('aria-label', muted ? 'Activar música' : 'Silenciar música');
+      }
+
+      var interactionEvents = ['pointerdown', 'keydown', 'touchstart'];
+      function removeUnlock() {
+        interactionEvents.forEach(function (evt) { document.removeEventListener(evt, unlock, true); });
+      }
+      function unlock(event) {
+        if (event && button.contains(event.target)) return; // the button handles its own click
+        removeUnlock();
+        if (!muted) audio.play().catch(function () {});
+      }
+
+      function start() {
+        if (muted) return;
+        audio.play().catch(function () {
+          // Autoplay blocked: start on the first interaction instead.
+          interactionEvents.forEach(function (evt) { document.addEventListener(evt, unlock, true); });
+        });
+      }
+
+      button.addEventListener('click', function () {
+        muted = !muted;
+        write(localStorage, MUTED_KEY, muted ? '1' : '0');
+        render();
+        if (muted) {
+          audio.pause();
+        } else {
+          removeUnlock();
+          audio.play().catch(function () {});
+        }
+      });
+
+      window.addEventListener('pagehide', function () {
+        write(sessionStorage, TIME_KEY, String(audio.currentTime));
+      });
+
+      render();
+      start();
+    })();
+  </script>
+{%- endunless -%}

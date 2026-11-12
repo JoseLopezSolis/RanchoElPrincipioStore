@@ -1,0 +1,2232 @@
+/*
+ * Rancho El Principio — diseño v3 (cartelera de noche).
+ * Teléfono primero: las reglas base son para teléfono; @media (min-width: 760px) es computadora.
+ * Paleta: negro, crema y rojo de cartel; arena detrás de las gorras; camuflaje solo en el encabezado.
+ * Letra: Inconsolata (títulos 900 en mayúsculas; datos, precios y botones 700/800) y Barlow para el texto.
+ */
+
+.rep3 {
+  font-family: var(--rep3-cuerpo);
+  color: var(--rep3-crema);
+}
+
+.rep3 *,
+.rep3 *::before,
+.rep3 *::after {
+  box-sizing: border-box;
+}
+
+.rep3-wrap {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: 16px;
+}
+
+.rep3-h2 {
+  margin: 0;
+  font: 900 29px/1.05 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+}
+
+.rep3-etq {
+  font: 800 16px/1 var(--rep3-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rep3-rojo {
+  color: var(--rep3-rojo-claro);
+}
+
+.rep3-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  min-width: 200px;
+  padding: 0 16px;
+  font: 800 18px/1 var(--rep3-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid var(--rep3-crema);
+  border-radius: 0;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.rep3-btn--borde {
+  background: transparent;
+  color: var(--rep3-crema);
+}
+
+.rep3 a:focus-visible,
+.rep3 button:focus-visible,
+.rep3-intro button:focus-visible {
+  outline: 2px solid var(--rep3-rojo-claro);
+  outline-offset: 3px;
+}
+
+/* ---------- Pantalla de carga: el logo latiendo sobre negro, como Monkey Hats ---------- */
+
+.rep3-carga {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rep3-negro);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 260ms ease, visibility 0s linear 0s;
+  /* Si algo falla, se quita sola */
+  animation: rep3-carga-tope 0s linear 4s forwards;
+}
+
+.rep3-carga.is-lista {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 400ms ease, visibility 0s linear 400ms;
+  animation: none;
+}
+
+.rep3-carga__logo {
+  display: block;
+  width: 170px;
+  max-width: 50vw;
+  height: auto;
+  animation: rep3-carga-late 0.9s ease-in-out infinite alternate;
+}
+
+@media (min-width: 760px) {
+  .rep3-carga__logo {
+    width: 220px;
+  }
+}
+
+/* En la primera visita al inicio, la monta ya es la pantalla de entrada. */
+.rep3-intro-on .rep3-carga {
+  display: none;
+}
+
+@keyframes rep3-carga-late {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0.45;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes rep3-carga-tope {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep3-carga__logo {
+    animation: none;
+  }
+}
+
+/* ---------- Encabezado: camuflaje con velo negro, sin línea roja ---------- */
+
+#header-component .header__row.header__row--top {
+  background-color: #2c2a26 !important;
+  background-image: linear-gradient(rgba(11, 10, 9, 0.6), rgba(11, 10, 9, 0.6)), var(--rep3-camo) !important;
+  background-size: auto, 640px auto !important;
+  background-position: center, center 40% !important;
+}
+
+/* Aviso de envíos: franja negra delgada arriba de todo; los mensajes se turnan con un fundido. */
+.rep3-aviso {
+  background: var(--rep3-negro);
+}
+
+.rep3-aviso__pista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.rep3-aviso__in {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 400ms ease, visibility 0s linear 400ms;
+}
+
+.rep3-aviso__in.is-activo {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 400ms ease, visibility 0s linear 0s;
+}
+
+.rep3-aviso__in {
+  margin: 0;
+  min-height: 36px;
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--rep3-crema);
+  font: 800 13px/1.2 var(--rep3-mono);
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.rep3-aviso__in svg {
+  flex: none;
+}
+
+@media (min-width: 760px) {
+  .rep3-aviso__in {
+    font-size: 14px;
+  }
+}
+
+/* Franja tricolor arriba del encabezado: verde, blanco y rojo de la bandera de México. */
+#header-component .header__row.header__row--top {
+  position: relative;
+}
+
+#header-component .header__row.header__row--top::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #006847 0 33.333%, #ffffff 33.333% 66.666%, #ce1126 66.666% 100%);
+  pointer-events: none;
+}
+
+.rep-logo-fallback {
+  display: block;
+  width: auto;
+  height: var(--rep-logo-h-m, 46px);
+}
+
+@media (min-width: 750px) {
+  .rep-logo-fallback {
+    height: var(--rep-logo-h, 64px);
+  }
+}
+
+/* Encabezado como Monkey Hats: buscar a la izquierda, menú partido alrededor del logo al centro,
+   cuenta y carrito a la derecha. Sin menú de hamburguesa: en teléfono navega el botón flotante. */
+#header-component header-menu,
+#header-component header-drawer {
+  display: none !important;
+}
+
+.rep3-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  height: 100%;
+}
+
+.rep3-hdr__nav {
+  display: none;
+}
+
+/* Sin el menú partido, el logo vuelve a ser el elemento que Horizon acomoda al centro;
+   el menú de hamburguesa va en la esquina izquierda. */
+.rep3-hdr__menu {
+  display: none;
+}
+
+@media (max-width: 989px) {
+  .rep3-hdr {
+    display: contents;
+  }
+
+  .rep3-hdr__menu {
+    grid-area: leftA;
+    justify-self: start;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--rep3-crema);
+    cursor: pointer;
+  }
+}
+
+@media (min-width: 990px) {
+  .rep3-hdr__nav {
+    flex: 0 1 300px;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .rep3-hdr__nav--izq {
+    justify-content: flex-end;
+  }
+
+  .rep3-hdr__nav--der {
+    justify-content: flex-start;
+  }
+
+  .rep3-hdr__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--rep3-crema);
+    font: 800 16px/1 var(--rep3-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1199px) {
+    .rep3-hdr {
+      gap: 18px;
+    }
+
+    .rep3-hdr__nav {
+      gap: 16px;
+    }
+
+    .rep3-hdr__nav a {
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+  }
+
+  .rep3-hdr__nav a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+}
+
+/* Teléfono y tableta: solo el logo al centro y el carrito; buscar y cuenta viven en «Navegación». */
+@media (max-width: 989px) {
+  #header-component .search-action,
+  #header-component .account-button {
+    display: none !important;
+  }
+}
+
+/* Inicio: el encabezado va transparente encima de la foto, con una sombra suave para leer el logo.
+   Al regresar fijo (subiendo) recupera el camuflaje. */
+#header-component[transparent]:not([data-sticky-state='active']) .header__row.header__row--top {
+  background-color: transparent !important;
+  background-image: linear-gradient(rgba(11, 10, 9, 0.7), rgba(11, 10, 9, 0)) !important;
+}
+
+/* Menú del teléfono: ligas grandes en Inconsolata, como en el diseño. */
+.menu-drawer__menu-item--mainlist .menu-drawer__menu-item-text {
+  font: 900 28px/1.1 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* ---------- Portada: Chuy recortado sobre la plaza ---------- */
+
+.rep3-hero-pista {
+  --rep3-hdr: 0px;
+}
+
+body:has(#header-component[transparent]) .rep3-hero-pista {
+  --rep3-hdr: var(--header-height, 60px);
+}
+
+.rep3-hero {
+  position: relative;
+  height: calc(640px + var(--rep3-hdr));
+  overflow: hidden;
+  background: var(--rep3-negro);
+}
+
+.rep3-hero__amb {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(11, 10, 9, 0.35), rgba(11, 10, 9, 0.35)), var(--rep3-amb) center 30% / cover no-repeat;
+}
+
+/* La foto completa, con el brazo, hacia atrás: más chica para que se vea Chuy y no solo su cara.
+   Pegada a la orilla derecha, donde termina la foto; abajo se funde con el negro. */
+.rep3-hero__arte {
+  position: absolute;
+  top: var(--rep3-hdr);
+  bottom: 0;
+  right: 0;
+  width: 470px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 86%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 86%);
+}
+
+.rep3-hero__fondo {
+  position: absolute;
+  inset: 0;
+  background: var(--rep3-fondo-m) no-repeat 0 0 / 100% auto;
+  /* Orillas suaves (y arriba, para que se una con el encabezado transparente sin una línea). */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 0, #000 14%, #000 86%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 22%);
+  mask-composite: intersect;
+}
+
+.rep3-hero__chuy {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+}
+
+.rep3-hero__panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 110px 16px 28px;
+  background: linear-gradient(to bottom, rgba(11, 10, 9, 0), rgba(11, 10, 9, 0.9) 110px);
+}
+
+.rep3-hero__in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.rep3-hero__h {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font: 900 46px/1 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+}
+
+.rep3-hero__p {
+  margin: 0;
+  font: 500 15px/1.3 var(--rep3-cuerpo);
+  color: var(--rep3-crema-suave);
+}
+
+.rep3-hero__btn {
+  margin-top: 6px;
+}
+
+/* Chuy vivo: entra con un zoom suave y luego respira despacio, sin fin.
+   La plaza ancha no se mueve; su fondo borroso se mueve menos que él, para dar profundidad.
+   Sin movimiento para quien lo pide en su teléfono. */
+@media (prefers-reduced-motion: no-preference) {
+  .rep3-hero__arte {
+    transform-origin: 50% 40%;
+  }
+
+  .rep3-hero:not(.is-viva) .rep3-hero__arte {
+    scale: 1.08;
+  }
+
+  .rep3-hero.is-viva .rep3-hero__arte {
+    animation: rep3-hero-entra 1.8s cubic-bezier(0.16, 0.84, 0.32, 1) both;
+  }
+
+  .rep3-hero.is-viva .rep3-hero__arte .rep3-hero__chuy {
+    transform-origin: 50% 100%;
+    animation: rep3-chuy-respira 8s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .rep3-hero-pista:not(.rep3-hero-pista--fija) .rep3-hero.is-viva .rep3-hero__fondo {
+    animation: rep3-fondo-respira 8s ease-in-out infinite;
+  }
+}
+
+@keyframes rep3-hero-entra {
+  from {
+    scale: 1.08;
+  }
+  to {
+    scale: 1;
+  }
+}
+
+@keyframes rep3-chuy-respira {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -1%, 0) scale(1.025);
+  }
+}
+
+@keyframes rep3-fondo-respira {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.012);
+  }
+}
+
+/* El texto entra cuando se va la monta. */
+.rep3-hero__in > * {
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.rep3-intro-on .rep3-hero__in > * {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* ---------- Teléfono: solo Chuy se queda fijo; la plaza y el texto siguen subiendo ---------- */
+
+.rep3-hero__capa {
+  display: none;
+}
+
+@media (max-width: 759px) {
+  .rep3-hero-pista--fija {
+    --rep3-pista: 300px;
+    position: relative;
+    height: calc(640px + var(--rep3-hdr) + var(--rep3-pista));
+    margin-bottom: calc(-1 * var(--rep3-pista));
+  }
+
+  /* El recorte de la portada se cambia por la capa fija; el fondo borroso se queda en la portada. */
+  .rep3-hero-pista--fija .rep3-hero__arte .rep3-hero__chuy {
+    visibility: hidden;
+  }
+
+  /* La capa ocupa el mismo lugar que la portada y se queda pegada arriba mientras la pista dura.
+     El encabezado se esconde al bajar, así que va pegada arriba del todo. */
+  .rep3-hero-pista--fija .rep3-hero__capa {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: calc(640px + var(--rep3-hdr));
+    margin-top: calc(-640px - var(--rep3-hdr));
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  body:has(#header-component[sticky='always']) .rep3-hero-pista--fija .rep3-hero__capa {
+    top: var(--header-height, 0px);
+  }
+
+  .rep3-hero__capa-arte {
+    position: absolute;
+    top: var(--rep3-hdr);
+    bottom: 0;
+    right: 0;
+    width: 470px;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 86%);
+    mask-image: linear-gradient(to bottom, #000 72%, transparent 86%);
+  }
+
+  /* El título y el botón van encima de Chuy. */
+  .rep3-hero-pista--fija .rep3-hero__panel {
+    z-index: 2;
+  }
+
+  /* Las secciones de abajo tapan a Chuy como una cortina. */
+  .shopify-section:has(.rep3-hero-pista--fija) ~ .shopify-section {
+    position: relative;
+    z-index: 1;
+    background: var(--rep3-negro);
+  }
+
+  .shopify-section:has(.rep3-hero-pista--fija) + .shopify-section {
+    box-shadow: 0 -18px 36px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Sin animaciones al bajar: el texto y Chuy se quedan igual.
+     Solo la copia borrosa de Chuy en la plaza se desvanece, para que no se vea doble mientras él se queda fijo. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .rep3-hero-pista--fija .rep3-hero__fondo {
+        animation: rep3-fondo-fuera linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 160px;
+      }
+    }
+  }
+}
+
+@keyframes rep3-fondo-fuera {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---------- Intro: la monta, con cámara lenta al final, sobre toda la pantalla ---------- */
+
+html.rep3-intro-on,
+html.rep3-intro-on .page-wrapper {
+  overflow: hidden;
+}
+
+.rep3-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--rep3-negro);
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.rep3-intro[hidden] {
+  display: none;
+}
+
+.rep3-intro.is-visible {
+  opacity: 1;
+}
+
+.rep3-intro.is-saliendo {
+  opacity: 0;
+  transition-duration: 700ms;
+  pointer-events: none;
+}
+
+.rep3-intro video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rep3-intro__pie {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.rep3-intro__marca {
+  font: 900 22px/1 var(--rep3-mono);
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.rep3-ctrl {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 2px solid var(--rep3-crema);
+  border-radius: 0;
+  background: rgba(11, 10, 9, 0.55);
+  color: var(--rep3-crema);
+  font: 800 15px/1 var(--rep3-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ---------- Las gorras ---------- */
+
+.rep3-gorras {
+  padding-block: 32px 14px;
+}
+
+.rep3-gorras__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.rep3-gorras__ver {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--rep3-crema);
+  text-decoration: none;
+}
+
+.rep3-carril {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.rep3-carril::-webkit-scrollbar {
+  display: none;
+}
+
+.rep3-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  color: var(--rep3-crema);
+  text-decoration: none;
+}
+
+.rep3-carril .rep3-card {
+  flex: 0 0 156px;
+}
+
+.rep3-card__link {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Botón «Agregar» en cada tarjeta: comprar sin abrir la ficha. */
+.rep3-agregar {
+  position: relative;
+  display: block;
+  margin-top: 4px;
+}
+
+/* El carril contiene lo que va adentro (el aviso oculto para lectores de pantalla no lo desborda). */
+.rep3-carril {
+  position: relative;
+}
+
+.rep3 .rep3-agregar__btn,
+.rep3-agregar__btn.button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid var(--rep3-crema);
+  border-radius: 0;
+  background: var(--rep3-crema);
+  color: var(--rep3-negro);
+  font: 800 15px/1 var(--rep3-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.rep3-agregar__btn .add-to-cart-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.rep3-agregar__btn[disabled] {
+  background: transparent;
+  color: var(--rep3-crema-tenue);
+  border-color: var(--rep3-cafe);
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .rep3-agregar__btn:hover:not([disabled]) {
+    background: var(--rep3-rojo);
+    border-color: var(--rep3-rojo);
+    color: var(--rep3-crema);
+  }
+}
+
+.rep3-card__foto {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
+  background: var(--rep3-arena);
+  overflow: hidden;
+}
+
+.rep3-card__foto img,
+.rep3-card__foto svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 300ms ease;
+}
+
+.rep3-card__agotada {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 4px 8px;
+  background: var(--rep3-rojo);
+  color: var(--rep3-crema);
+  font: 800 12px/1 var(--rep3-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rep3-card__nombre {
+  font: 800 19px/1.05 var(--rep3-mono);
+  text-transform: uppercase;
+}
+
+.rep3-card__precio {
+  font: 700 18px/1 var(--rep3-mono);
+}
+
+/* ---------- Llévate 3 ---------- */
+
+.rep3-promo-sec {
+  padding-block: 4px 34px;
+}
+
+.rep3-promo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--rep3-rojo);
+  border: 2px solid var(--rep3-rojo);
+  color: var(--rep3-crema);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.rep3-promo__num {
+  font: 800 64px/0.8 var(--rep3-mono);
+}
+
+.rep3-promo__txt {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rep3-promo__t {
+  font: 800 20px/1.05 var(--rep3-mono);
+  text-transform: uppercase;
+}
+
+.rep3-promo__p {
+  font: 400 13px/1.3 var(--rep3-cuerpo);
+}
+
+.rep3-promo__gorras {
+  display: flex;
+}
+
+.rep3-promo__gorras img {
+  display: block;
+  width: 58px;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(11, 10, 9, 0.5));
+}
+
+.rep3-promo__gorras img + img {
+  margin-left: -26px;
+}
+
+/* ---------- Rancho El Principio ---------- */
+
+.rep3-rancho {
+  border-top: 4px solid var(--rep3-rojo);
+}
+
+.rep3-rancho__in {
+  padding-inline: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rep3-rancho__foto {
+  position: relative;
+  margin: 0;
+}
+
+.rep3-rancho__foto img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  object-position: 60% 50%;
+}
+
+.rep3-rancho__foto figcaption {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 4px 8px;
+  background: var(--rep3-velo);
+  font: 400 12px/1.3 var(--rep3-cuerpo);
+  color: var(--rep3-crema-tenue);
+}
+
+.rep3-rancho__txt {
+  padding: 28px 16px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rep3-rancho__h {
+  font-size: 36px;
+}
+
+.rep3-rancho__rte p {
+  margin: 0 0 14px;
+  font: 400 17px/1.55 var(--rep3-cuerpo);
+  color: var(--rep3-crema-suave);
+}
+
+.rep3-rancho__rte p:last-child {
+  margin-bottom: 0;
+}
+
+.rep3-rancho__rte strong {
+  color: var(--rep3-crema);
+}
+
+.rep3-rancho__datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.rep3-dato {
+  padding: 14px 12px;
+  border: 4px solid var(--rep3-rojo);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rep3-dato .rep3-etq {
+  font-size: 15px;
+}
+
+.rep3-dato__v {
+  font: 800 20px/1.1 var(--rep3-mono);
+  text-transform: uppercase;
+}
+
+.rep3-rancho__btn {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* ---------- Redes: publicaciones de Instagram ---------- */
+
+.rep3-redes {
+  padding-block: 32px 36px;
+  border-top: 4px solid var(--rep3-linea);
+}
+
+.rep3-redes__head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.rep3-redes__titulos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rep3-redes__handle {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: 600 16px/1 var(--rep3-cuerpo);
+  color: var(--rep3-rojo-claro);
+  text-decoration: none;
+}
+
+.rep3-redes__botones {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.rep3-redes__btn {
+  min-width: 0;
+  min-height: 44px;
+  gap: 6px;
+  padding: 0 6px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+/* Teléfono: se deslizan de lado; computadora: tres columnas. */
+.rep3-redes__lista {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 16px;
+  padding: 0 16px 6px;
+  scrollbar-width: none;
+}
+
+.rep3-redes__lista::-webkit-scrollbar {
+  display: none;
+}
+
+/* Todas del mismo tamaño: barra propia (48 px) + foto cuadrada. */
+.rep3-post {
+  --rep3-post-w: min(84vw, 340px);
+  position: relative;
+  flex: 0 0 var(--rep3-post-w);
+  width: var(--rep3-post-w);
+  height: calc(var(--rep3-post-w) + 48px);
+  overflow: hidden;
+  border: 2px solid var(--rep3-cafe);
+  background: var(--rep3-negro);
+  scroll-snap-align: start;
+}
+
+.rep3-post__barra {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 12px;
+  background: var(--rep3-negro);
+  border-bottom: 2px solid var(--rep3-cafe);
+  color: var(--rep3-crema);
+  text-decoration: none;
+}
+
+.rep3-post__usuario {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: 600 14px/1 var(--rep3-cuerpo);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rep3-post__ver {
+  font: 800 14px/1 var(--rep3-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--rep3-rojo-claro);
+}
+
+/* El marco solo deja ver la foto: la barra blanca de Instagram queda arriba, fuera de vista. */
+.rep3-post__marco {
+  position: relative;
+  height: calc(var(--rep3-post-w) - 2px);
+  overflow: hidden;
+}
+
+/* La barra blanca de Instagram mide 54 px; en fotos verticales se recorta al centro para que no se asome la orilla blanca. */
+.rep3-post__frame {
+  position: absolute;
+  top: calc(-55px - (var(--rep3-post-w) - 4px) * (var(--rep3-ig-r, 1) - 1) / 2);
+  left: -1px;
+  display: block;
+  width: calc(100% + 2px);
+  height: 900px;
+  border: 0;
+}
+
+/* Foto fija de la publicación: cuadrada en computadora, con su forma completa en teléfono. */
+.rep3-post__foto {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.rep3-post__foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rep3-post__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rep3-post--foto {
+  display: block;
+  background: var(--rep3-superficie);
+  color: var(--rep3-crema);
+  text-decoration: none;
+}
+
+.rep3-post--foto img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.rep3-post__pie {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 36px 14px 14px;
+  background: linear-gradient(to bottom, rgba(11, 10, 9, 0), rgba(11, 10, 9, 0.85) 36px);
+  font: 800 16px/1.2 var(--rep3-mono);
+  text-transform: uppercase;
+}
+
+/* Teléfono: cada publicación con su forma completa de Instagram (vertical u horizontal), sin recortar. */
+@media (max-width: 759px) {
+  .rep3-redes__lista {
+    align-items: flex-start;
+  }
+
+  .rep3-post--ig {
+    height: auto;
+  }
+
+  .rep3-post--ig .rep3-post__marco {
+    height: calc((var(--rep3-post-w) - 4px) * var(--rep3-ig-r, 1));
+  }
+
+  .rep3-post--ig .rep3-post__frame {
+    top: -55px;
+  }
+}
+
+@media (hover: hover) {
+  .rep3-post__barra:hover .rep3-post__ver {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .rep3-redes__handle:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .rep3-post--foto:hover img {
+    transform: scale(1.04);
+  }
+}
+
+@media (min-width: 760px) {
+  .rep3-redes {
+    padding-block: 56px 64px;
+  }
+
+  .rep3-redes__head {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+  }
+
+  /* Cuadrícula: 3 columnas en tableta, 4 en computadora. El ancho de cada tarjeta sale del contenedor. */
+  .rep3-redes__lista {
+    container-type: inline-size;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .rep3-post {
+    --rep3-post-w: calc((100cqi - 2 * 24px) / 3);
+    width: auto;
+  }
+
+  .rep3-redes__botones {
+    display: flex;
+    gap: 8px;
+  }
+
+  .rep3-redes__btn {
+    gap: 8px;
+    padding: 0 14px;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* En computadora también 3 columnas: con 6 publicaciones quedan 2 filas completas, sin huecos. */
+@media (min-width: 990px) {
+  .rep3-redes__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .rep3-post {
+    --rep3-post-w: calc((100cqi - 2 * 28px) / 3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep3-post--foto img {
+    transition: none;
+  }
+}
+
+/* ---------- Poquito pero fino ---------- */
+
+.rep3-frase {
+  padding: 34px 16px 38px;
+  border-top: 4px solid var(--rep3-linea);
+  text-align: center;
+}
+
+.rep3-frase__t {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font: 900 43px/1.05 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+}
+
+.rep3-frase__t em,
+.rep3-pie__frase em {
+  font-style: normal;
+  color: var(--rep3-rojo-claro);
+}
+
+/* ---------- Pie ---------- */
+
+.rep3-pie {
+  border-top: 1px solid var(--rep3-cafe);
+  background: var(--rep3-negro);
+}
+
+.rep3-pie__in {
+  padding-block: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.rep3-pie__frase {
+  margin: 0;
+  font: 900 25px/1.15 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.rep3-pie__ig {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: 600 16px/1 var(--rep3-cuerpo);
+  color: var(--rep3-crema);
+  text-decoration: none;
+}
+
+.rep3-pie__nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+}
+
+.rep3-pie__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font: 800 15px/1 var(--rep3-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+  text-decoration: none;
+}
+
+.rep3-pie__legal {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+}
+
+.rep3-pie__legal a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font: 400 13px/1.3 var(--rep3-cuerpo);
+  color: var(--rep3-crema-tenue);
+}
+
+.rep3-pie__copy {
+  margin: 0;
+  font: 400 12px/1.4 var(--rep3-cuerpo);
+  color: var(--rep3-crema-tenue);
+}
+
+/* ---------- Navegación flotante (teléfono) ---------- */
+
+.rep3-nav {
+  display: none;
+}
+
+/* El menú sale desde la izquierda, de alto completo (antes subía desde abajo como una tarjeta). */
+.rep3-nav__panel {
+  inset: 0 auto 0 0;
+  margin: 0;
+  width: min(86vw, 380px);
+  max-width: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  overflow: auto;
+  border: 0;
+  border-right: 2px solid var(--rep3-cafe);
+  border-radius: 0;
+  background: var(--rep3-negro);
+  color: var(--rep3-crema);
+}
+
+.rep3-nav__panel::backdrop {
+  background: rgba(11, 10, 9, 0.6);
+}
+
+.rep3-nav__panel[open] {
+  animation: rep3-nav-entra 240ms ease-out;
+}
+
+.rep3-nav__panel.is-cerrando {
+  animation: rep3-nav-sale 180ms ease-in forwards;
+}
+
+@keyframes rep3-nav-entra {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes rep3-nav-sale {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.rep3-nav__lista ul {
+  margin: 0;
+  padding: 22px 16px 10px;
+  list-style: none;
+}
+
+.rep3-nav__lista .rep3-nav__sub {
+  padding: 0 0 8px;
+}
+
+.rep3-nav__a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 54px;
+  padding: 0 44px 0 8px;
+  background: none;
+  border: 0;
+  color: var(--rep3-crema);
+  font: 900 22px/1.1 var(--rep3-mono);
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.rep3-nav__a[aria-current='page'] {
+  color: var(--rep3-rojo-claro);
+}
+
+.rep3-nav__chev {
+  position: absolute;
+  right: 24px;
+  transition: transform 0.2s;
+}
+
+.rep3-nav__a--sub[aria-expanded='true'] .rep3-nav__chev {
+  transform: rotate(90deg);
+}
+
+.rep3-nav__a--chico {
+  min-height: 44px;
+  font-size: 18px;
+  color: var(--rep3-crema-suave);
+}
+
+.rep3-nav__cerrar {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 72px;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--rep3-cafe);
+  color: var(--rep3-crema);
+  cursor: pointer;
+}
+
+.rep3-nav button:focus-visible,
+.rep3-nav a:focus-visible {
+  outline: 2px solid var(--rep3-rojo-claro);
+  outline-offset: -4px;
+}
+
+@media (max-width: 989px) {
+  .rep3-nav {
+    display: block;
+  }
+
+  /* Botón flotante retirado: la Navegación se abre desde la hamburguesa del encabezado. */
+  .rep3-nav__btn {
+    display: none !important;
+    position: fixed;
+    z-index: 50;
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    max-width: 420px;
+    min-height: 56px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    border: 2px solid rgba(246, 242, 236, 0.85);
+    border-radius: 999px;
+    background: var(--rep3-negro);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    color: var(--rep3-crema);
+    font: 800 17px/1 var(--rep3-mono);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .rep3-intro-on .rep3-nav__btn {
+    display: none;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep3-nav__panel[open],
+  .rep3-nav__panel.is-cerrando {
+    animation: none;
+  }
+}
+
+/* ---------- Botón flotante de WhatsApp ---------- */
+
+.rep3-wa {
+  position: fixed;
+  z-index: 60;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  min-width: 56px;
+  height: 56px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  font: 800 15px/1 var(--rep3-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.rep3-wa span {
+  display: none;
+}
+
+.rep3-wa:focus-visible {
+  outline: 2px solid var(--rep3-crema);
+  outline-offset: 3px;
+}
+
+.rep3-intro-on .rep3-wa {
+  display: none;
+}
+
+/* En la ficha nunca tapa «Agregar al carrito»: se esconde mientras quedaría encima del botón
+   y en el teléfono sube arriba de la barra fija de «Agregar» cuando esta aparece. */
+.rep3-wa {
+  transition: opacity 200ms ease, bottom 200ms ease, visibility 0s linear 0s;
+}
+
+.rep3-wa.is-oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 200ms ease, bottom 200ms ease, visibility 0s linear 200ms;
+}
+
+@media (max-width: 749px) {
+  body:has(sticky-add-to-cart [ref='stickyBar'][data-stuck='true']) .rep3-wa--alto {
+    bottom: calc(92px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 990px) {
+  .rep3-wa {
+    right: 24px;
+    bottom: 24px;
+    padding: 0 18px 0 14px;
+  }
+
+  .rep3-wa span {
+    display: inline;
+  }
+}
+
+.rep3-wa-aviso {
+  position: fixed;
+  z-index: 60;
+  right: 16px;
+  bottom: 16px;
+  max-width: 260px;
+  margin: 0;
+  padding: 10px 12px;
+  background: #25d366;
+  color: #0b0a09;
+  font: 600 13px/1.3 var(--rep3-cuerpo);
+}
+
+/* ---------- Producto: las otras gorras ---------- */
+
+.rep3-otras {
+  border-top: 1px solid var(--rep3-cafe);
+}
+
+.rep3-otras .rep3-wrap {
+  padding-block: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rep3-otras__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 12px;
+}
+
+/* ---------- Envío gratis (producto y carrito) ---------- */
+
+.rep3-envio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--rep3-superficie);
+  border: 1px solid var(--rep3-cafe);
+  color: var(--rep3-crema);
+}
+
+.rep3-envio__t {
+  margin: 0;
+  font: 800 19px/1.15 var(--rep3-mono);
+  text-transform: uppercase;
+}
+
+.rep3-envio__barra {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.rep3-envio__barra span {
+  height: 8px;
+  background: var(--rep3-cafe);
+}
+
+.rep3-envio__barra span.is-on {
+  background: var(--rep3-rojo);
+}
+
+.rep3-envio__nota {
+  margin: 0;
+  font: 400 14px/1.4 var(--rep3-cuerpo);
+  color: var(--rep3-crema-tenue);
+}
+
+.cart-drawer__content > .rep3-envio {
+  margin: 0 0 8px;
+}
+
+/* Ficha del producto: la tarjeta va arriba, junto al precio, y en chico para no empujar los botones. */
+.rep3-envio--compacta {
+  gap: 8px;
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+.rep3-envio--compacta .rep3-envio__t {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  color: var(--rep3-crema);
+}
+
+.rep3-envio--compacta .rep3-envio__barra {
+  gap: 3px;
+  max-width: 320px;
+}
+
+.rep3-envio--compacta .rep3-envio__barra span {
+  height: 3px;
+  background: var(--rep3-cafe);
+}
+
+.rep3-envio--compacta .rep3-envio__barra span.is-on {
+  background: var(--rep3-rojo-claro);
+}
+
+.rep3-envio--compacta .rep3-envio__nota {
+  display: none;
+}
+
+/* Computadora: la foto del producto más alta para no dejar hueco debajo junto a la ficha. */
+@media (min-width: 750px) {
+  .product-information .product-information__media .product-media {
+    aspect-ratio: 1 !important;
+  }
+}
+
+/* Teléfono: la ficha cabe completa con el botón de comprar a la vista, sin bajar. */
+@media (max-width: 749px) {
+  .product-information .product-information__media .product-media {
+    aspect-ratio: 2 !important;
+  }
+
+  .product-information .product-details .group-block-content {
+    row-gap: 12px !important;
+  }
+
+  .product-information .product-details h1 {
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  .product-information product-price .price {
+    font-size: 24px;
+  }
+
+  /* La nota de tarifas ya está en «Envíos y cambios». */
+  .rep3-envio--compacta .rep3-envio__nota {
+    display: none;
+  }
+
+  .rep2-modelos {
+    gap: 8px;
+  }
+
+  .rep2-modelos__list {
+    max-width: 260px;
+    gap: 6px;
+  }
+}
+
+/* ---------- Página de producto (Horizon) ---------- */
+
+.product-information .product-details h1 {
+  font: 900 34px/1.08 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.product-information product-price .price {
+  font: 800 34px/1 var(--rep3-mono);
+  color: var(--rep3-crema);
+}
+
+/* Galería: la gorra completa sobre arena, con la franja roja arriba. */
+.product-information .product-information__media .product-media-container,
+.product-information .product-information__media .product-media {
+  background: var(--rep3-arena);
+}
+
+.product-information .product-information__media .product-media-container {
+  border-top: 0;
+}
+
+.product-information .product-media-container .product-media__image {
+  object-fit: contain;
+  padding: 5%;
+  background: var(--rep3-arena);
+}
+
+.product-information .add-to-cart-button {
+  font: 800 18px/1 var(--rep3-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Gana a .accordion .details__header de Horizon, que carga después. */
+.product-information .accordion .details__header {
+  min-height: 56px;
+  font: 800 20px/1.2 var(--rep3-mono);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.rep2-modelos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rep2-modelos__label {
+  margin: 0;
+  font: 800 16px/1 var(--rep3-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rep2-modelos__label span {
+  font: 500 15px/1 var(--rep3-cuerpo);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--rep3-crema-suave);
+}
+
+.rep2-modelos__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-width: 400px;
+}
+
+.rep2-modelos__a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  min-height: 44px;
+  background: var(--rep3-arena);
+  border: 3px solid transparent;
+}
+
+.rep2-modelos__a img {
+  display: block;
+  width: 84%;
+  height: auto;
+}
+
+.rep2-modelos__a.is-current {
+  border-color: var(--rep3-crema);
+}
+
+/* Con muchas gorras: en el teléfono una sola fila que se desliza (el botón de comprar no baja);
+   en pantallas grandes, seis por fila. */
+@media (max-width: 749px) {
+  .rep2-modelos__list {
+    display: flex;
+    max-width: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+  }
+
+  .rep2-modelos__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .rep2-modelos__list > li {
+    flex: 0 0 72px;
+    scroll-snap-align: start;
+  }
+}
+
+@media (min-width: 750px) {
+  .rep2-modelos__list {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    max-width: 480px;
+  }
+}
+
+/* Ficha estilo drop: un solo botón para comprar («Agregar al carrito»). */
+.product-information .rep-buy-now-wrap {
+  display: none;
+}
+
+/* "Comprar ahora": botón de borde crema bajo el de agregar. */
+.rep-buy-now-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rep-buy-now {
+  width: 100%;
+  min-height: var(--height-buy-buttons, 54px);
+  padding: 0 20px;
+  background: transparent;
+  color: var(--rep3-crema);
+  border: 2px solid var(--rep3-crema);
+  border-radius: 0;
+  font: 800 18px/1 var(--rep3-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.rep-buy-now[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rep-buy-now[aria-busy='true'] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.rep-buy-now__error {
+  margin: 0;
+  font: 500 14px/1.35 var(--rep3-cuerpo);
+  color: var(--rep3-rojo-claro);
+}
+
+/* Barra fija de "Agregar al carrito": negra con filo rojo. */
+sticky-add-to-cart .sticky-add-to-cart__bar::before {
+  background: var(--rep3-negro);
+  border: 0;
+  box-shadow: inset 0 1px 0 var(--rep3-cafe);
+  backdrop-filter: none;
+}
+
+sticky-add-to-cart .sticky-add-to-cart__image {
+  background: var(--rep3-arena);
+}
+
+sticky-add-to-cart .sticky-add-to-cart__image-img {
+  object-fit: contain;
+  padding: 4px;
+}
+
+sticky-add-to-cart .sticky-add-to-cart__title,
+sticky-add-to-cart .sticky-add-to-cart__price,
+sticky-add-to-cart .sticky-add-to-cart__price .price {
+  font: 800 16px/1.2 var(--rep3-mono);
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+}
+
+/* ---------- Carrito (cajón y página): la gorra completa sobre arena, sin recortar ---------- */
+
+.cart-items__media-container {
+  background: var(--rep3-arena);
+}
+
+.cart-items .cart-items__media-image {
+  object-fit: contain;
+  padding: 8%;
+}
+
+/* Miniatura más grande que la de Horizon, para que se vea qué gorra es */
+.cart-items .cart-items__table-row {
+  grid-template-columns: clamp(4.5rem, 22cqi, 7.5rem) minmax(0, 1fr) minmax(var(--cart-item-price-width), auto);
+}
+
+.cart-items .cart-items__table-row--full-width-variants {
+  grid-template-columns: clamp(4.5rem, 22cqi, 7.5rem) minmax(0, 1fr) auto;
+}
+
+/* ---------- Tarjetas de producto de Horizon (colección, búsqueda) ---------- */
+
+product-card .card-gallery {
+  --gallery-aspect-ratio: 1 !important;
+  background: var(--rep3-arena);
+}
+
+product-card .card-gallery img.product-media__image {
+  object-fit: contain;
+  padding: 6%;
+}
+
+product-card [ref='productTitleLink'] p {
+  margin: 0;
+  font: 800 19px/1.05 var(--rep3-mono);
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+}
+
+product-card product-price .price {
+  font: 700 18px/1 var(--rep3-mono);
+  color: var(--rep3-crema);
+}
+
+@media (min-width: 990px) {
+  .product-grid.product-grid--grid:not([product-grid-view='zoom-out']) {
+    --product-grid-columns-desktop: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Encabezado de colección ---------- */
+
+.rep-colhero {
+  border-bottom: 4px solid var(--rep3-rojo);
+  background: var(--rep3-negro);
+  color: var(--rep3-crema);
+}
+
+.rep-colhero .rep-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rep-colhero .rep-kicker {
+  margin: 0;
+  font: 800 15px/1.2 var(--rep3-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rep3-rojo-claro);
+}
+
+.rep-colhero .rep-colhero__title {
+  margin: 0;
+  font: 900 clamp(46px, 12vw, 96px) / 0.95 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--rep3-crema);
+}
+
+.rep-colhero .rep-colhero__slogan {
+  margin: 0;
+  font: 900 clamp(22px, 5.4vw, 34px) / 1.1 var(--rep3-mono);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.rep-colhero .rep-red {
+  color: var(--rep3-rojo-claro);
+}
+
+.rep-colhero .rep-colhero__desc {
+  max-width: 560px;
+  font: 400 16px/1.55 var(--rep3-cuerpo);
+  color: var(--rep3-crema-suave);
+}
+
+.rep-colhero .rep-colhero__desc p {
+  margin: 0;
+}
+
+/* ---------- Solo con mouse: en pantallas táctiles el hover se queda pegado ---------- */
+
+@media (hover: hover) {
+  .rep3-btn--borde:hover,
+  .rep-buy-now:hover:not([disabled]),
+  .rep3-ctrl:hover {
+    border-color: var(--rep3-rojo-claro);
+    color: var(--rep3-rojo-claro);
+  }
+
+  .rep3-gorras__ver:hover,
+  .rep3-card__link:hover .rep3-card__nombre,
+  .rep3-pie__nav a:hover,
+  .rep3-pie__ig:hover,
+  product-card:hover [ref='productTitleLink'] p {
+    color: var(--rep3-rojo-claro);
+  }
+
+  .rep3-card__link:hover .rep3-card__foto img {
+    transform: scale(1.04);
+  }
+
+  .rep3-promo:hover {
+    background: var(--rep3-negro);
+  }
+
+  .rep2-modelos__a:hover:not(.is-current) {
+    border-color: var(--rep3-crema-tenue);
+  }
+}
+
+/* ---------- Computadora: de 760 px en adelante ---------- */
+
+@media (min-width: 760px) {
+  .rep3-wrap {
+    padding-inline: 40px;
+  }
+
+  .rep3-h2 {
+    font-size: 40px;
+  }
+
+  /* Chuy completo pegado a la orilla derecha; su plaza borrosa se desvanece a la izquierda. */
+  .rep3-hero {
+    height: calc(clamp(560px, 46vw, 720px) + var(--rep3-hdr));
+  }
+
+  .rep3-hero__amb {
+    background: linear-gradient(90deg, rgba(11, 10, 9, 0.94) 0, rgba(11, 10, 9, 0.78) 45%, rgba(11, 10, 9, 0.45) 100%),
+      var(--rep3-amb) center 30% / cover no-repeat;
+  }
+
+  .rep3-hero__arte {
+    left: auto;
+    right: 0;
+    width: auto;
+    height: auto;
+    aspect-ratio: 1.21;
+    -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  }
+
+  .rep3-hero__fondo {
+    background-image: var(--rep3-fondo-d);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 40%), linear-gradient(to bottom, transparent 0, #000 22%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent 0, #000 40%), linear-gradient(to bottom, transparent 0, #000 22%);
+    mask-composite: intersect;
+  }
+
+  .rep3-hero__panel {
+    position: relative;
+    height: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--rep3-hdr) 40px 0;
+    display: flex;
+    align-items: center;
+    background: none;
+  }
+
+  .rep3-hero__in {
+    align-items: flex-start;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .rep3-hero__h {
+    font-size: clamp(56px, 6.6vw, 96px);
+    line-height: 0.95;
+  }
+
+  .rep3-hero__p {
+    font-size: 20px;
+  }
+
+  .rep3-hero__btn {
+    min-width: 240px;
+    margin-top: 10px;
+  }
+
+  .rep3-intro__pie {
+    padding: 32px 40px;
+  }
+
+  .rep3-intro__marca {
+    font-size: 34px;
+  }
+
+  .rep3-gorras {
+    padding-block: 56px 24px;
+  }
+
+  .rep3-gorras__head {
+    margin-bottom: 24px;
+  }
+
+  .rep3-carril {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    overflow: visible;
+  }
+
+  .rep3-carril .rep3-card {
+    flex: none;
+  }
+
+  .rep3-card {
+    gap: 10px;
+  }
+
+  .rep3-card__foto {
+    padding: 16px;
+  }
+
+  .rep3-card__nombre {
+    font-size: 22px;
+  }
+
+  .rep3-card__precio {
+    font-size: 20px;
+  }
+
+  .rep3-promo-sec {
+    padding-block: 8px 64px;
+  }
+
+  .rep3-promo {
+    gap: 24px;
+    padding: 18px 28px;
+  }
+
+  .rep3-promo__num {
+    font-size: 88px;
+  }
+
+  .rep3-promo__t {
+    font-size: 28px;
+  }
+
+  .rep3-promo__p {
+    font-size: 16px;
+  }
+
+  .rep3-promo__gorras img {
+    width: 96px;
+  }
+
+  .rep3-promo__gorras img + img {
+    margin-left: -40px;
+  }
+
+  .rep3-rancho__in {
+    padding: 64px 40px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 56px;
+    align-items: center;
+  }
+
+  .rep3-rancho__foto img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .rep3-rancho__txt {
+    padding: 0;
+    gap: 18px;
+  }
+
+  .rep3-rancho__h {
+    font-size: 49px;
+  }
+
+  .rep3-rancho__rte p {
+    font-size: 19px;
+  }
+
+  .rep3-dato .rep3-etq {
+    font-size: 16px;
+  }
+
+  .rep3-dato__v {
+    font-size: 24px;
+  }
+
+  .rep3-rancho__btn {
+    width: auto;
+    align-self: flex-start;
+    min-width: 240px;
+  }
+
+  .rep3-frase {
+    padding: 56px 24px 60px;
+  }
+
+  .rep3-frase__t {
+    display: block;
+    font-size: 63px;
+  }
+
+  .rep3-frase__t span + span {
+    margin-left: 0.5ch;
+  }
+
+  .rep3-pie__in {
+    padding-block: 36px 40px;
+  }
+
+  .rep3-pie__frase {
+    font-size: 31px;
+  }
+
+  .rep3-otras__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .rep-colhero .rep-wrap {
+    padding: 64px 40px;
+  }
+
+  .product-information .product-details h1 {
+    font-size: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rep3-intro,
+  .rep3-hero__in > *,
+  .rep3-card__foto img {
+    transition: none;
+  }
+}

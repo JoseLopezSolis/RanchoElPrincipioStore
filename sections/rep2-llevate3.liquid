@@ -1,0 +1,38 @@
+{%- liquid
+  assign s = section.settings
+  assign shown = 0
+-%}
+
+{%- if s.collection != blank and s.collection.products_count > 1 -%}
+  <section class="rep rep2-l3">
+    <div class="rep2-wrap rep2-l3__in">
+      <h2 class="rep2-h2 rep2-l3__h">{{ s.heading | escape }}</h2>
+      <div class="rep2-l3__grid">
+        {%- for p in s.collection.products -%}
+          {%- if p.id == product.id -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- if shown >= 3 -%}
+            {%- break -%}
+          {%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          {% render 'rep2-card', product: p, prefix: s.name_prefix, sizes: '(min-width: 900px) 300px, 33vw' %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "REP2 · Llévate 3",
+  "tag": "div",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título", "default": "Llévate 3 y el envío va gratis" },
+    { "type": "collection", "id": "collection", "label": "Colección" },
+    { "type": "text", "id": "name_prefix", "label": "Quitar del nombre", "default": "Gorra El Principio" }
+  ],
+  "presets": [{ "name": "REP2 · Llévate 3" }]
+}
+{% endschema %}

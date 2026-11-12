@@ -1,0 +1,42 @@
+{% doc %}
+  Cuadro de envío gratis (producto y carrito): tres tramos, uno por gorra.
+  Tarifas fijas (Configuración › Envío): estándar $149, gratis desde $2,997 MXN; cada gorra cuesta $999.
+  Solo se muestra en pesos: la tarifa internacional no tiene envío gratis.
+
+  @param {boolean} [nota] - Muestra la línea de tarifas debajo de la barra.
+  @param {boolean} [compacta] - Versión chica, para la ficha del producto (arriba, junto al precio).
+{% enddoc %}
+
+{%- liquid
+  assign meta_centavos = 299700
+  assign gorra_centavos = 99900
+  assign falta = meta_centavos | minus: cart.total_price
+  assign faltan = 0
+  if falta > 0
+    assign faltan = falta | times: 1.0 | divided_by: gorra_centavos | ceil
+  endif
+  assign llenas = 3 | minus: faltan
+-%}
+
+{%- if cart.currency.iso_code == 'MXN' -%}
+  <div class="rep3-envio{% if compacta %} rep3-envio--compacta{% endif %}">
+    <p class="rep3-envio__t">
+      {%- if faltan == 0 -%}
+        ¡Tu envío va gratis!
+      {%- elsif cart.item_count == 0 -%}
+        Llévate 3 gorras y el envío va gratis
+      {%- else -%}
+        Llevas {{ cart.item_count }} {% if cart.item_count == 1 %}gorra{% else %}gorras{% endif %} · te
+        {% if faltan == 1 %}falta 1{% else %}faltan {{ faltan }}{% endif %} para el envío gratis
+      {%- endif -%}
+    </p>
+    <div class="rep3-envio__barra" aria-hidden="true">
+      {%- for i in (1..3) -%}
+        <span{% if i <= llenas %} class="is-on"{% endif %}></span>
+      {%- endfor -%}
+    </div>
+    {%- if nota -%}
+      <p class="rep3-envio__nota">Envío estándar $149 · gratis en compras de $2,997 o más (3 gorras).</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

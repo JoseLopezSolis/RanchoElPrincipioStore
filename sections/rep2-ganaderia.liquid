@@ -1,0 +1,105 @@
+{%- assign s = section.settings -%}
+
+<section class="rep rep2-gan" id="{{ s.anchor | default: 'ganaderia' | handleize }}">
+  <figure class="rep2-gan__fig">
+    {%- if s.image != blank -%}
+      {{
+        s.image
+        | image_url: width: 1400
+        | image_tag:
+          loading: 'lazy',
+          widths: '600, 900, 1200, 1400',
+          sizes: '(min-width: 900px) 50vw, 100vw',
+          class: 'rep2-gan__img',
+          alt: s.image_alt
+      }}
+    {%- else -%}
+      <img
+        class="rep2-gan__img"
+        src="{{ 'rep-monta-3.jpg' | asset_url }}"
+        width="1600"
+        height="1066"
+        alt="{{ s.image_alt | escape }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+    {%- if s.credit != blank -%}
+      <figcaption>{{ s.credit | escape }}</figcaption>
+    {%- endif -%}
+  </figure>
+
+  <div class="rep2-gan__txt">
+    <h2 class="rep2-h2">{{ s.heading | escape }}</h2>
+    <div class="rep2-gan__p">{{ s.text }}</div>
+
+    {%- if s.name != blank -%}
+      <div class="rep2-gan__who">
+        {%- if s.portrait != blank -%}
+          {{
+            s.portrait
+            | image_url: width: 300
+            | image_tag: loading: 'lazy', widths: '180, 300', sizes: '88px', class: 'rep2-gan__face', alt: s.name
+          }}
+        {%- else -%}
+          <img
+            class="rep2-gan__face"
+            src="{{ 'rep-chuy.jpg' | asset_url }}"
+            width="384"
+            height="426"
+            alt="{{ s.name | escape }}"
+            loading="lazy"
+          >
+        {%- endif -%}
+        <div class="rep2-gan__who-txt">
+          <span class="rep2-gan__name">{{ s.name | escape }}</span>
+          {%- if s.role != blank -%}
+            <span class="rep2-gan__role">{{ s.role | escape }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if s.instagram_url != blank -%}
+      <a class="rep2-gan__ig" href="{{ s.instagram_url }}" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        {{- s.instagram_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP2 · Ganadería",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Foto" },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Descripción de la foto",
+      "default": "El toro brinca sobre el jinete caído mientras el lazador y el payaso entran al ruedo"
+    },
+    { "type": "text", "id": "credit", "label": "Crédito de la foto", "default": "Foto: Aferrados al Jaripeo" },
+    { "type": "text", "id": "heading", "label": "Título", "default": "Rancho El Principio" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Somos la ganadería de Chuy Ordaz, la Selección Colimense. Hemos atendido jaripeos en todos los estados de la República y tenemos presencia en la Unión Americana.</p>"
+    },
+    { "type": "image_picker", "id": "portrait", "label": "Retrato" },
+    { "type": "text", "id": "name", "label": "Nombre", "default": "Chuy Ordaz" },
+    { "type": "text", "id": "role", "label": "Cargo", "default": "Al frente de la ganadería" },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "Instagram",
+      "default": "https://www.instagram.com/ranchoelprincipio_oficial/"
+    },
+    { "type": "text", "id": "instagram_label", "label": "Texto del enlace", "default": "@ranchoelprincipio_oficial" },
+    { "type": "text", "id": "anchor", "label": "Ancla", "default": "ganaderia" }
+  ],
+  "presets": [{ "name": "REP2 · Ganadería" }]
+}
+{% endschema %}

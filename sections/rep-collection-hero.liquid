@@ -1,0 +1,39 @@
+{%- liquid
+  assign s = section.settings
+  assign c = collection
+-%}
+
+<section class="rep rep-colhero rep-camo">
+  <div class="rep-colhero__veil">
+    <div class="rep-wrap rep-colhero__wrap">
+      {%- if s.kicker != blank -%}
+        <p class="rep-kicker">{{ s.kicker | escape }}</p>
+      {%- endif -%}
+      <h1 class="rep-colhero__title">{{ c.title | default: s.fallback_title | escape }}</h1>
+      {%- if s.slogan_1 != blank or s.slogan_2 != blank -%}
+        <p class="rep-colhero__slogan">
+          {{- s.slogan_1 | escape }}
+          {% if s.slogan_2 != blank %}<span class="rep-red">{{ s.slogan_2 | escape }}</span>{% endif -%}
+        </p>
+      {%- endif -%}
+      {%- if s.show_description and c.description != blank -%}
+        <div class="rep-colhero__desc">{{ c.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP · Colección",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Antetítulo", "default": "Mercancía oficial · Rancho El Principio" },
+    { "type": "text", "id": "fallback_title", "label": "Título si no hay colección", "default": "La tienda" },
+    { "type": "text", "id": "slogan_1", "label": "Frase", "default": "Poquito" },
+    { "type": "text", "id": "slogan_2", "label": "Frase (en rojo)", "default": "pero fino" },
+    { "type": "checkbox", "id": "show_description", "label": "Mostrar descripción de la colección", "default": true }
+  ],
+  "presets": [{ "name": "REP · Colección" }]
+}
+{% endschema %}

@@ -1,0 +1,48 @@
+{%- comment -%}
+  Rancho El Principio v3: pantalla de carga con el logo, como Monkey Hats.
+  Cubre la página mientras carga y vuelve a salir al ir a otra página de la tienda.
+  Sin JavaScript se quita sola a los 3 segundos. No sale en el editor del tema.
+{%- endcomment -%}
+{%- unless request.design_mode -%}
+  <div class="rep3-carga" id="rep3-carga" aria-hidden="true">
+    {%- if settings.logo != blank -%}
+      {{ settings.logo | image_url: width: 400 | image_tag: class: 'rep3-carga__logo', widths: '200, 400', sizes: '200px', alt: '', loading: 'eager' }}
+    {%- else -%}
+      <img class="rep3-carga__logo" src="{{ 'rep-logo.png' | asset_url }}" width="1000" height="386" alt="" loading="eager">
+    {%- endif -%}
+  </div>
+  <noscript><style>.rep3-carga { display: none; }</style></noscript>
+  <script>
+    (function () {
+      var carga = document.getElementById('rep3-carga');
+      if (!carga) return;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function ocultar() { carga.classList.add('is-lista'); }
+      function mostrar() { carga.classList.remove('is-lista'); }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function () { setTimeout(ocultar, 120); });
+      } else {
+        setTimeout(ocultar, 120);
+      }
+      // Al regresar con el botón de atrás la página sale del caché: sin pantalla de carga
+      window.addEventListener('pageshow', function (e) { if (e.persisted) ocultar(); });
+
+      document.addEventListener('click', function (e) {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a || a.target || a.hasAttribute('download') || a.hasAttribute('data-no-transition')) return;
+        var url;
+        try { url = new URL(a.href, location.href); } catch (err) { return; }
+        if (url.origin !== location.origin || !/^https?:$/.test(url.protocol)) return;
+        // Ligas a una sección de la misma página (#gorras, #rancho) no cambian de página
+        if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
+        if (/^\/(checkout|cart\/add|account\/logout)/.test(url.pathname)) return;
+        e.preventDefault();
+        mostrar();
+        setTimeout(function () { location.href = url.href; }, reduce ? 0 : 260);
+      });
+    })();
+  </script>
+{%- endunless -%}

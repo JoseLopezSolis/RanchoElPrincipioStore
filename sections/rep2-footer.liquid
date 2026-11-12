@@ -1,0 +1,60 @@
+{%- assign s = section.settings -%}
+
+<div class="rep rep2-foot">
+  <div class="rep2-wrap rep2-foot__in">
+    <div class="rep2-foot__brand">
+      <a href="{{ routes.root_url }}" class="rep2-foot__logo">
+        {%- if s.logo != blank -%}
+          {{ s.logo | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 400', sizes: '170px', alt: shop.name }}
+        {%- else -%}
+          <img src="{{ 'rep-logo.png' | asset_url }}" width="1000" height="386" alt="{{ shop.name | escape }}" loading="lazy">
+        {%- endif -%}
+      </a>
+      <p class="rep2-foot__copy">© {{ 'now' | date: '%Y' }} {{ s.copyright | escape }}</p>
+    </div>
+
+    <nav class="rep2-foot__nav" aria-label="Pie de página">
+      {%- for link in s.menu.links -%}
+        <a class="rep2-foot__a" href="{{ link.url }}">{{ link.title | escape }}</a>
+      {%- endfor -%}
+      {%- if s.instagram_url != blank -%}
+        <a class="rep2-foot__a" href="{{ s.instagram_url }}" target="_blank" rel="noopener">Instagram</a>
+      {%- endif -%}
+    </nav>
+  </div>
+
+  {%- if s.show_policies and shop.policies.size > 0 -%}
+    <div class="rep2-wrap rep2-foot__legal">
+      <ul>
+        {%- for policy in shop.policies -%}
+          <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "REP2 · Pie de página",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Si no eliges uno, se usa el logo oficial del tema." },
+    { "type": "link_list", "id": "menu", "label": "Menú", "default": "main-menu" },
+    {
+      "type": "text",
+      "id": "instagram_url",
+      "label": "Instagram",
+      "default": "https://www.instagram.com/ranchoelprincipio_oficial/"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Texto de derechos",
+      "default": "Rancho El Principio · Selección Colimense de Chuy Ordaz"
+    },
+    { "type": "checkbox", "id": "show_policies", "label": "Mostrar políticas de la tienda", "default": true }
+  ],
+  "presets": [{ "name": "REP2 · Pie de página" }]
+}
+{% endschema %}

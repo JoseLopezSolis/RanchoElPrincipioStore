@@ -1,0 +1,52 @@
+{%- comment -%}
+  Rancho El Principio — diseño v3 (cartelera de noche).
+  Fuentes de marca (Inconsolata para títulos y datos, Barlow para el cuerpo) y estilos de las secciones rep3-*.
+  Se renderiza en layout/theme.liquid después de las variables del tema para que estas
+  sobrescriban las fuentes del selector de tipografía.
+{%- endcomment -%}
+{%- comment -%} Ícono de la pestaña: el cráneo de toro del logo. Si se sube un favicon en Configuración del tema, ese manda. {%- endcomment -%}
+{%- if settings.favicon == blank -%}
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ 'rep-icono-32.png' | asset_url }}">
+  <link rel="icon" type="image/png" sizes="48x48" href="{{ 'rep-icono-48.png' | asset_url }}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{{ 'rep-icono-192.png' | asset_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ 'rep-icono-180.png' | asset_url }}">
+{%- endif -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Inconsolata:wght@700;800;900&display=swap"
+  rel="stylesheet"
+>
+<style>
+  :root {
+    --font-body--family: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+    --font-body--style: normal;
+    --font-body--weight: 400;
+    --font-subheading--family: 'Inconsolata', Consolas, ui-monospace, monospace;
+    --font-subheading--style: normal;
+    --font-subheading--weight: 800;
+    --font-heading--family: 'Inconsolata', Consolas, ui-monospace, monospace;
+    --font-heading--style: normal;
+    --font-heading--weight: 900;
+    --font-accent--family: 'Inconsolata', Consolas, ui-monospace, monospace;
+    --font-accent--style: normal;
+    --font-accent--weight: 800;
+
+    --rep3-negro: #0b0a09;
+    --rep3-superficie: #141210;
+    --rep3-arena: #d9cec0;
+    --rep3-crema: #f6f2ec;
+    --rep3-crema-suave: #e6dacb;
+    --rep3-crema-tenue: #d8cfc4;
+    --rep3-rojo: #c62828;
+    --rep3-rojo-claro: #ef4136;
+    --rep3-cafe: #3a322c;
+    --rep3-linea: #2a2420;
+    --rep3-velo: rgba(11, 10, 9, 0.78);
+    --rep3-mono: 'Inconsolata', Consolas, ui-monospace, monospace;
+    --rep3-cuerpo: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+    --rep3-camo: url('{{ 'rep-camo-woodland.svg' | asset_url }}');
+  }
+</style>
+{{ 'rep3.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'rep.js' | asset_url }}" defer></script>

@@ -1,0 +1,35 @@
+{% doc %}
+  Barra de envío gratis en el carrito: tres tramos, uno por gorra.
+  Tarifas fijas (Configuración › Envío): gratis desde $3,600 MXN; cada gorra cuesta $1,200.
+  Solo se muestra en pesos: la tarifa internacional no tiene envío gratis.
+{% enddoc %}
+
+{%- liquid
+  assign meta_centavos = 360000
+  assign gorra_centavos = 120000
+  assign falta = meta_centavos | minus: cart.total_price
+  assign faltan = 0
+  if falta > 0
+    assign faltan = falta | times: 1.0 | divided_by: gorra_centavos | ceil
+  endif
+  assign llenas = 3 | minus: faltan
+-%}
+
+{%- if cart.currency.iso_code == 'MXN' -%}
+  <div class="rep2-prog">
+    <p class="rep2-prog__t">
+      {%- if faltan == 0 -%}
+        ¡Listo! Tu envío es gratis.
+      {%- elsif faltan == 1 -%}
+        Te falta 1 gorra para el envío gratis.
+      {%- else -%}
+        Te faltan {{ faltan }} gorras para el envío gratis.
+      {%- endif -%}
+    </p>
+    <div class="rep2-prog__bar" aria-hidden="true">
+      {%- for i in (1..3) -%}
+        <span{% if i <= llenas %} class="is-on"{% endif %}></span>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

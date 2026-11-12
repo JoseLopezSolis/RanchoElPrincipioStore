@@ -1,0 +1,64 @@
+{%- liquid
+  assign s = section.settings
+  assign ver_todas = routes.all_products_collection_url
+  if s.collection != blank
+    assign ver_todas = s.collection.url
+  endif
+-%}
+
+<section class="rep3 rep3-gorras" id="{{ s.anchor | default: 'gorras' | handleize }}">
+  <div class="rep3-wrap rep3-gorras__head">
+    <h2 class="rep3-h2">{{ s.heading | escape }}</h2>
+    {%- if s.link_label != blank -%}
+      <a class="rep3-etq rep3-gorras__ver" href="{{ ver_todas }}">{{ s.link_label | escape }}</a>
+    {%- endif -%}
+  </div>
+
+  <div class="rep3-wrap rep3-carril">
+    {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.product != blank -%}
+          {% render 'rep3-card', product: block.settings.product, prefix: s.name_prefix, attrs: block.shopify_attributes, agregar: true, section_id: section.id %}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- elsif s.collection != blank -%}
+      {%- for p in s.collection.products limit: 16 -%}
+        {% render 'rep3-card', product: p, prefix: s.name_prefix, agregar: true, section_id: section.id %}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "REP3 · Las gorras",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Título", "default": "Las gorras" },
+    { "type": "text", "id": "link_label", "label": "Enlace a la colección", "default": "Ver todas" },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Colección",
+      "info": "Se usa para el enlace «Ver todas» y si no agregas gorras una por una."
+    },
+    {
+      "type": "text",
+      "id": "name_prefix",
+      "label": "Quitar del nombre",
+      "info": "Las tarjetas muestran el nombre sin este texto inicial (\"Gorra El Principio Original\" → \"Original\").",
+      "default": "Gorra El Principio"
+    },
+    { "type": "text", "id": "anchor", "label": "Ancla", "info": "Para enlaces como #gorras.", "default": "gorras" }
+  ],
+  "blocks": [
+    {
+      "type": "producto",
+      "name": "Gorra",
+      "settings": [{ "type": "product", "id": "product", "label": "Producto" }]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [{ "name": "REP3 · Las gorras" }]
+}
+{% endschema %}

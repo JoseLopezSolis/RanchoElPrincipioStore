@@ -23,6 +23,7 @@
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
+    {%- render 'rep-head' -%}
 
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
@@ -33,6 +34,7 @@
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
+    {%- render 'rep3-carga' -%}
 
     {% render 'chat-drawer' %}
 
@@ -156,7 +158,19 @@
         data-product-transition="{{ settings.transition_to_main_product }}"
         data-template="{{ template }}"
       >
-        {{ content_for_layout }}
+        {%- if request.page_type == 'policy' -%}
+          {%- comment -%} Shopify pone el título de las políticas en el idioma de la tienda (inglés); aquí va en español. {%- endcomment -%}
+          {{
+            content_for_layout
+            | replace: '<h1>Privacy policy</h1>', '<h1>Aviso de privacidad</h1>'
+            | replace: '<h1>Refund policy</h1>', '<h1>Política de devoluciones</h1>'
+            | replace: '<h1>Terms of service</h1>', '<h1>Términos del servicio</h1>'
+            | replace: '<h1>Shipping policy</h1>', '<h1>Política de envíos</h1>'
+            | replace: '<h1>Contact information</h1>', '<h1>Información de contacto</h1>'
+          }}
+        {%- else -%}
+          {{ content_for_layout }}
+        {%- endif -%}
       </main>
 
       <footer>
@@ -172,5 +186,7 @@
     {% if settings.quick_add or settings.mobile_quick_add %}
       {% render 'quick-add-modal' %}
     {% endif %}
+
+    {% render 'background-music' %}
   </body>
 </html>
