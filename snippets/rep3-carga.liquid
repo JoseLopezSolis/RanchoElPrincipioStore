@@ -31,6 +31,9 @@
 
       document.addEventListener('click', function (e) {
         if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        // Con la navegación sin recarga activa (assets/rep-nav.js) la página no se recarga y la música
+        // sigue; esta pantalla solo queda como respaldo si ese script no cargó.
+        if (window.repNavigate) return;
         var a = e.target.closest && e.target.closest('a[href]');
         if (!a || a.target || a.hasAttribute('download') || a.hasAttribute('data-no-transition')) return;
         var url;

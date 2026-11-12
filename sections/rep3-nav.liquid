@@ -89,6 +89,7 @@
     abrir.addEventListener('click', function () { mostrar(abrir); });
     // El menú de hamburguesa del encabezado también abre la Navegación
     document.addEventListener('click', function (e) {
+      if (!raiz.isConnected) return; // menú de una página anterior (cambio de página sin recargar)
       var b = e.target.closest && e.target.closest('[data-rep3-nav-abrir]');
       if (b) { e.preventDefault(); mostrar(b); }
     });
