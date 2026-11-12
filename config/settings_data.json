@@ -110,7 +110,7 @@
     },
     "type_case_h4": "uppercase",
     "pills_border_radius": 0,
-    "show_accelerated_checkout_buttons": false
+    "show_accelerated_checkout_buttons": true
   },
   "presets": {
     "Horizon": {
