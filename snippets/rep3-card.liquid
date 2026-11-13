@@ -37,7 +37,7 @@
       {{ 'product-1' | placeholder_svg_tag }}
     {%- endif -%}
     {%- unless product.available -%}
-      <span class="rep3-card__agotada">Agotada</span>
+      <span class="rep3-card__agotada">Sold out</span>
     {%- endunless -%}
   </span>
   <span class="rep3-card__nombre">{{ name | escape }}</span>
