@@ -102,8 +102,10 @@
         }
       },
       "block_order": [
-        "gorra_1",
         "gorra_2",
+        "gorra_12",
+        "gorra_13",
+        "gorra_1",
         "gorra_3",
         "gorra_4",
         "gorra_5",
@@ -112,9 +114,7 @@
         "gorra_8",
         "gorra_9",
         "gorra_10",
-        "gorra_11",
-        "gorra_12",
-        "gorra_13"
+        "gorra_11"
       ]
     },
     "rep3_promo": {
