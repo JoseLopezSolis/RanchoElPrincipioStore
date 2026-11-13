@@ -31,7 +31,7 @@
         "gorra_2": {
           "type": "producto",
           "settings": {
-            "product": "gorra-el-principio-fino"
+            "product": "gorra-el-principio-negra-tricolor"
           }
         },
         "gorra_3": {
@@ -87,6 +87,18 @@
           "settings": {
             "product": "gorra-el-principio-arena-con-gamuza"
           }
+        },
+        "gorra_12": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-el-principio-hueso-tricolor"
+          }
+        },
+        "gorra_13": {
+          "type": "producto",
+          "settings": {
+            "product": "gorra-negra-lisa"
+          }
         }
       },
       "block_order": [
@@ -100,7 +112,9 @@
         "gorra_8",
         "gorra_9",
         "gorra_10",
-        "gorra_11"
+        "gorra_11",
+        "gorra_12",
+        "gorra_13"
       ]
     },
     "rep3_promo": {
